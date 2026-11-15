@@ -1,0 +1,10 @@
+.root {
+    -fx-base: #e6f2ff;
+    -fx-background: #f0f8ff;
+    -fx-control-inner-background: #ffffff;
+    -fx-text-base-color: #003366;
+    -fx-accent: #0066cc;
+}
+.menu-bar {
+    -fx-background-color: #cce6ff;
+}

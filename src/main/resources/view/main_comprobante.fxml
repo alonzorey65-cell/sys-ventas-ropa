@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.controller.MainComprobanteController">
+    <children>
+        <VBox spacing="8.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
+            <children>
+                <Label text="Gestión de Ventas / Comprobantes">
+                    <font><Font name="System Bold" size="18.0" /></font>
+                </Label>
+
+                <HBox spacing="8.0">
+                    <children>
+                        <Button fx:id="btnRefrescar" mnemonicParsing="false" onAction="#listarVentas" text="Refrescar" />
+                        <Button fx:id="btnVer" mnemonicParsing="false" onAction="#verComprobanteSeleccionado" text="Ver comprobante" />
+                        <Button fx:id="btnEliminarVenta" mnemonicParsing="false" onAction="#eliminarVentaSeleccionada" text="Eliminar venta" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnExportarPdf" mnemonicParsing="false" onAction="#onExportarPdf" prefHeight="32.0" prefWidth="130.0" text="Exportar PDF" />
+                        <Button fx:id="btnImprimir" mnemonicParsing="false" onAction="#onImprimir" prefHeight="32.0" prefWidth="110.0" text="Imprimir" />
+                    </children>
+                </HBox>
+
+                <SplitPane dividerPositions="0.45" VBox.vgrow="ALWAYS">
+                    <items>
+                        <VBox spacing="6.0">
+                            <children>
+                                <Label text="Ventas registradas (CRUD: listar / ver / eliminar)" />
+                                <TableView fx:id="tableVentas" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colId" prefWidth="60.0" text="ID" />
+                                        <TableColumn fx:id="colFecha" prefWidth="140.0" text="Fecha" />
+                                        <TableColumn fx:id="colSerie" prefWidth="70.0" text="Serie" />
+                                        <TableColumn fx:id="colNumero" prefWidth="100.0" text="Número" />
+                                        <TableColumn fx:id="colCliente" prefWidth="160.0" text="Cliente" />
+                                        <TableColumn fx:id="colTotal" prefWidth="90.0" text="Total" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </VBox>
+                        <VBox spacing="6.0">
+                            <children>
+                                <Label text="Vista previa del comprobante" />
+                                <ScrollPane fx:id="scrollVisor" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                                    <content>
+                                        <AnchorPane style="-fx-background-color: #e0e0e0;" />
+                                    </content>
+                                </ScrollPane>
+                            </children>
+                        </VBox>
+                    </items>
+                </SplitPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

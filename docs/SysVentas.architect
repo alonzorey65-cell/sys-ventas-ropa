@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<architect-project version="1.0" appversion="1.0.9">
+ <project-name>SysVentas</project-name>
+ <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
+ <project-data-sources>
+  <data-source id="DS0">
+   <property key="Logical" value="PlayPen Database" />
+  </data-source>
+ </project-data-sources>
+ <source-databases>
+ </source-databases>
+ <target-database id="ppdb" dbcs-ref="DS0">
+  <table id="TAB1" populated="true" name="usuario" objectType="TABLE" physicalName="usuario">
+   <folder id="FOL1" populated="true" name="Columns" physicalName="Columns" type="1">
+    <column id="COL1" populated="true" name="id_usuario" nullable="0" physicalName="id_usuario" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL2" populated="true" name="username" nullable="0" physicalName="username" precision="50" referenceCount="1" scale="0" type="12" />
+    <column id="COL3" populated="true" name="password" nullable="0" physicalName="password" precision="100" referenceCount="1" scale="0" type="12" />
+    <column id="COL4" populated="true" name="id_perfil" nullable="1" physicalName="id_perfil" precision="0" referenceCount="2" scale="0" type="-5" />
+   </folder>
+   <folder id="FOL2" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL3" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL4" populated="true" name="Indices" type="4">
+    <index id="IDX1" populated="true" name="usuario_pk" physicalName="usuario_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC1" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL1" name="id_usuario" physicalName="id_usuario" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB2" populated="true" name="perfil" objectType="TABLE" physicalName="perfil">
+   <folder id="FOL5" populated="true" name="Columns" type="1">
+    <column id="COL5" populated="true" name="id_perfil" nullable="0" physicalName="id_perfil" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL6" populated="true" name="nombre" nullable="0" physicalName="nombre" precision="50" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL6" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL7" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL8" populated="true" name="Indices" type="4">
+    <index id="IDX2" populated="true" name="perfil_pk" physicalName="perfil_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC2" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL5" name="id_perfil" physicalName="id_perfil" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB3" populated="true" name="menu" objectType="TABLE" physicalName="menu">
+   <folder id="FOL9" populated="true" name="Columns" type="1">
+    <column id="COL7" populated="true" name="id" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL8" populated="true" name="menu_nombre" nullable="0" physicalName="menu_nombre" precision="50" referenceCount="1" scale="0" type="12" />
+    <column id="COL9" populated="true" name="menu_item_nombre" nullable="1" physicalName="menu_item_nombre" precision="50" referenceCount="1" scale="0" type="12" />
+    <column id="COL10" populated="true" name="id_nombre_obj" nullable="0" physicalName="id_nombre_obj" precision="50" referenceCount="1" scale="0" type="12" />
+    <column id="COL11" populated="true" name="perfil" nullable="0" physicalName="perfil" precision="30" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL10" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL11" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL12" populated="true" name="Indices" type="4">
+    <index id="IDX3" populated="true" name="menu_pk" physicalName="menu_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC3" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL7" name="id" physicalName="id" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB4" populated="true" name="categoria" objectType="TABLE" physicalName="categoria">
+   <folder id="FOL13" populated="true" name="Columns" type="1">
+    <column id="COL12" populated="true" name="id_categoria" nullable="0" physicalName="id_categoria" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL13" populated="true" name="nombre" nullable="0" physicalName="nombre" precision="100" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL14" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL15" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL16" populated="true" name="Indices" type="4">
+    <index id="IDX4" populated="true" name="categoria_pk" physicalName="categoria_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC4" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL12" name="id_categoria" physicalName="id_categoria" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB5" populated="true" name="marca" objectType="TABLE" physicalName="marca">
+   <folder id="FOL17" populated="true" name="Columns" type="1">
+    <column id="COL14" populated="true" name="id_marca" nullable="0" physicalName="id_marca" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL15" populated="true" name="nombre" nullable="0" physicalName="nombre" precision="100" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL18" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL19" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL20" populated="true" name="Indices" type="4">
+    <index id="IDX5" populated="true" name="marca_pk" physicalName="marca_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC5" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL14" name="id_marca" physicalName="id_marca" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB6" populated="true" name="unidad_medida" objectType="TABLE" physicalName="unidad_medida">
+   <folder id="FOL21" populated="true" name="Columns" type="1">
+    <column id="COL16" populated="true" name="id_unid_medida" nullable="0" physicalName="id_unid_medida" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL17" populated="true" name="nombre" nullable="0" physicalName="nombre" precision="50" referenceCount="1" scale="0" type="12" />
+    <column id="COL18" populated="true" name="abreviatura" nullable="1" physicalName="abreviatura" precision="20" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL22" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL23" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL24" populated="true" name="Indices" type="4">
+    <index id="IDX6" populated="true" name="unidad_medida_pk" physicalName="unidad_medida_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC6" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL16" name="id_unid_medida" physicalName="id_unid_medida" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB7" populated="true" name="producto" objectType="TABLE" physicalName="producto">
+   <folder id="FOL25" populated="true" name="Columns" type="1">
+    <column id="COL19" populated="true" name="id" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL20" populated="true" name="nombre" nullable="0" physicalName="nombre" precision="100" referenceCount="1" scale="0" type="12" />
+    <column id="COL21" populated="true" name="precio" nullable="0" physicalName="precio" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL22" populated="true" name="stock" nullable="0" physicalName="stock" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL23" populated="true" name="id_categoria" nullable="1" physicalName="id_categoria" precision="0" referenceCount="2" scale="0" type="-5" />
+    <column id="COL24" populated="true" name="id_marca" nullable="1" physicalName="id_marca" precision="0" referenceCount="2" scale="0" type="-5" />
+    <column id="COL25" populated="true" name="id_unid_medida" nullable="1" physicalName="id_unid_medida" precision="0" referenceCount="2" scale="0" type="-5" />
+   </folder>
+   <folder id="FOL26" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL27" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL28" populated="true" name="Indices" type="4">
+    <index id="IDX7" populated="true" name="producto_pk" physicalName="producto_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC7" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL19" name="id" physicalName="id" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB8" populated="true" name="cliente" objectType="TABLE" physicalName="cliente">
+   <folder id="FOL29" populated="true" name="Columns" type="1">
+    <column id="COL26" populated="true" name="id_cliente" nullable="0" physicalName="id_cliente" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL27" populated="true" name="nombre" nullable="0" physicalName="nombre" precision="100" referenceCount="1" scale="0" type="12" />
+    <column id="COL28" populated="true" name="dni_ruc" nullable="1" physicalName="dni_ruc" precision="20" referenceCount="1" scale="0" type="12" />
+    <column id="COL29" populated="true" name="direccion" nullable="1" physicalName="direccion" precision="150" referenceCount="1" scale="0" type="12" />
+    <column id="COL30" populated="true" name="telefono" nullable="1" physicalName="telefono" precision="30" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL30" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL31" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL32" populated="true" name="Indices" type="4">
+    <index id="IDX8" populated="true" name="cliente_pk" physicalName="cliente_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC8" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL26" name="id_cliente" physicalName="id_cliente" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB9" populated="true" name="vent_carrito" objectType="TABLE" physicalName="vent_carrito">
+   <folder id="FOL33" populated="true" name="Columns" type="1">
+    <column id="COL31" populated="true" name="id_vent_carrito" nullable="0" physicalName="id_vent_carrito" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL32" populated="true" name="id_producto" nullable="0" physicalName="id_producto" precision="0" referenceCount="2" scale="0" type="-5" />
+    <column id="COL33" populated="true" name="nombre_producto" nullable="0" physicalName="nombre_producto" precision="150" referenceCount="1" scale="0" type="12" />
+    <column id="COL34" populated="true" name="cantidad" nullable="0" physicalName="cantidad" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL35" populated="true" name="p_buffer" nullable="0" physicalName="p_buffer" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL36" populated="true" name="subtotal" nullable="0" physicalName="subtotal" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL37" populated="true" name="id_usuario" nullable="1" physicalName="id_usuario" precision="0" referenceCount="2" scale="0" type="-5" />
+   </folder>
+   <folder id="FOL34" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL35" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL36" populated="true" name="Indices" type="4">
+    <index id="IDX9" populated="true" name="vent_carrito_pk" physicalName="vent_carrito_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC9" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL31" name="id_vent_carrito" physicalName="id_vent_carrito" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB10" populated="true" name="venta" objectType="TABLE" physicalName="venta">
+   <folder id="FOL37" populated="true" name="Columns" type="1">
+    <column id="COL38" populated="true" name="id_venta" nullable="0" physicalName="id_venta" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL39" populated="true" name="fecha" nullable="0" physicalName="fecha" precision="0" referenceCount="1" scale="0" type="93" />
+    <column id="COL40" populated="true" name="id_cliente" nullable="1" physicalName="id_cliente" precision="0" referenceCount="2" scale="0" type="-5" />
+    <column id="COL41" populated="true" name="id_usuario" nullable="1" physicalName="id_usuario" precision="0" referenceCount="2" scale="0" type="-5" />
+    <column id="COL42" populated="true" name="total" nullable="0" physicalName="total" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL43" populated="true" name="tipo_comprobante" nullable="1" physicalName="tipo_comprobante" precision="30" referenceCount="1" scale="0" type="12" />
+    <column id="COL44" populated="true" name="serie" nullable="1" physicalName="serie" precision="10" referenceCount="1" scale="0" type="12" />
+    <column id="COL45" populated="true" name="nro_comprobante" nullable="1" physicalName="nro_comprobante" precision="30" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL38" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL39" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL40" populated="true" name="Indices" type="4">
+    <index id="IDX10" populated="true" name="venta_pk" physicalName="venta_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC10" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL38" name="id_venta" physicalName="id_venta" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB11" populated="true" name="venta_detalle" objectType="TABLE" physicalName="venta_detalle">
+   <folder id="FOL41" populated="true" name="Columns" type="1">
+    <column id="COL46" populated="true" name="id_venta_detalle" nullable="0" physicalName="id_venta_detalle" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL47" populated="true" name="id_venta" nullable="0" physicalName="id_venta" precision="0" referenceCount="2" scale="0" type="-5" />
+    <column id="COL48" populated="true" name="id_producto" nullable="0" physicalName="id_producto" precision="0" referenceCount="2" scale="0" type="-5" />
+    <column id="COL49" populated="true" name="cantidad" nullable="0" physicalName="cantidad" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL50" populated="true" name="precio" nullable="0" physicalName="precio" precision="0" referenceCount="1" scale="0" type="8" />
+    <column id="COL51" populated="true" name="subtotal" nullable="0" physicalName="subtotal" precision="0" referenceCount="1" scale="0" type="8" />
+   </folder>
+   <folder id="FOL42" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL43" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL44" populated="true" name="Indices" type="4">
+    <index id="IDX11" populated="true" name="venta_detalle_pk" physicalName="venta_detalle_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC11" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL46" name="id_venta_detalle" physicalName="id_venta_detalle" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB12" populated="true" name="emisor" objectType="TABLE" physicalName="emisor">
+   <folder id="FOL45" populated="true" name="Columns" type="1">
+    <column id="COL52" populated="true" name="id_emisor" nullable="0" physicalName="id_emisor" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL53" populated="true" name="ruc" nullable="0" physicalName="ruc" precision="20" referenceCount="1" scale="0" type="12" />
+    <column id="COL54" populated="true" name="razon_social" nullable="0" physicalName="razon_social" precision="150" referenceCount="1" scale="0" type="12" />
+    <column id="COL55" populated="true" name="direccion" nullable="1" physicalName="direccion" precision="150" referenceCount="1" scale="0" type="12" />
+    <column id="COL56" populated="true" name="telefono" nullable="1" physicalName="telefono" precision="30" referenceCount="1" scale="0" type="12" />
+    <column id="COL57" populated="true" name="correo" nullable="1" physicalName="correo" precision="100" referenceCount="1" scale="0" type="12" />
+   </folder>
+   <folder id="FOL46" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL47" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL48" populated="true" name="Indices" type="4">
+    <index id="IDX12" populated="true" name="emisor_pk" physicalName="emisor_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC12" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL52" name="id_emisor" physicalName="id_emisor" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB13" populated="true" name="documento_comercial" objectType="TABLE" physicalName="documento_comercial">
+   <folder id="FOL49" populated="true" name="Columns" type="1">
+    <column id="COL58" populated="true" name="id_documento" nullable="0" physicalName="id_documento" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" type="-5" />
+    <column id="COL59" populated="true" name="nombre" nullable="0" physicalName="nombre" precision="50" referenceCount="1" scale="0" type="12" />
+    <column id="COL60" populated="true" name="serie" nullable="1" physicalName="serie" precision="10" referenceCount="1" scale="0" type="12" />
+    <column id="COL61" populated="true" name="numeracion" nullable="1" physicalName="numeracion" precision="0" referenceCount="1" scale="0" type="4" />
+   </folder>
+   <folder id="FOL50" populated="true" name="Exported Keys" type="3" />
+   <folder id="FOL51" populated="true" name="Imported Keys" type="2" />
+   <folder id="FOL52" populated="true" name="Indices" type="4">
+    <index id="IDX13" populated="true" name="documento_comercial_pk" physicalName="documento_comercial_pk" primaryKeyIndex="true" unique="true">
+     <index-column id="IDC13" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL58" name="id_documento" physicalName="id_documento" />
+    </index>
+   </folder>
+  </table>
+  <relationships>
+   <relationship id="REL1" populated="true" name="fk_usuario_perfil" physicalName="fk_usuario_perfil" pk-table-ref="TAB2" fk-table-ref="TAB1" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP1" populated="true" fk-column-ref="COL4" pk-column-ref="COL5" />
+   </relationship>
+   <relationship id="REL2" populated="true" name="fk_producto_categoria" physicalName="fk_producto_categoria" pk-table-ref="TAB4" fk-table-ref="TAB7" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP2" populated="true" fk-column-ref="COL23" pk-column-ref="COL12" />
+   </relationship>
+   <relationship id="REL3" populated="true" name="fk_producto_marca" physicalName="fk_producto_marca" pk-table-ref="TAB5" fk-table-ref="TAB7" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP3" populated="true" fk-column-ref="COL24" pk-column-ref="COL14" />
+   </relationship>
+   <relationship id="REL4" populated="true" name="fk_producto_unidad_medida" physicalName="fk_producto_unidad_medida" pk-table-ref="TAB6" fk-table-ref="TAB7" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP4" populated="true" fk-column-ref="COL25" pk-column-ref="COL16" />
+   </relationship>
+   <relationship id="REL5" populated="true" name="fk_vent_carrito_producto" physicalName="fk_vent_carrito_producto" pk-table-ref="TAB7" fk-table-ref="TAB9" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP5" populated="true" fk-column-ref="COL32" pk-column-ref="COL19" />
+   </relationship>
+   <relationship id="REL6" populated="true" name="fk_venta_detalle_producto" physicalName="fk_venta_detalle_producto" pk-table-ref="TAB7" fk-table-ref="TAB11" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP6" populated="true" fk-column-ref="COL48" pk-column-ref="COL19" />
+   </relationship>
+   <relationship id="REL7" populated="true" name="fk_vent_carrito_usuario" physicalName="fk_vent_carrito_usuario" pk-table-ref="TAB1" fk-table-ref="TAB9" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP7" populated="true" fk-column-ref="COL37" pk-column-ref="COL1" />
+   </relationship>
+   <relationship id="REL8" populated="true" name="fk_venta_usuario" physicalName="fk_venta_usuario" pk-table-ref="TAB1" fk-table-ref="TAB10" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP8" populated="true" fk-column-ref="COL41" pk-column-ref="COL1" />
+   </relationship>
+   <relationship id="REL9" populated="true" name="fk_venta_cliente" physicalName="fk_venta_cliente" pk-table-ref="TAB8" fk-table-ref="TAB10" pk-cardinality="1" fk-cardinality="0..n" identifying="false">
+    <column-mapping id="CMP9" populated="true" fk-column-ref="COL40" pk-column-ref="COL26" />
+   </relationship>
+   <relationship id="REL10" populated="true" name="fk_venta_detalle_venta" physicalName="fk_venta_detalle_venta" pk-table-ref="TAB10" fk-table-ref="TAB11" pk-cardinality="1" fk-cardinality="0..n" identifying="true">
+    <column-mapping id="CMP10" populated="true" fk-column-ref="COL47" pk-column-ref="COL38" />
+   </relationship>
+  </relationships>
+ </target-database>
+ <ddl-generator type="ca.sqlpower.architect.ddl.GenericDDLGenerator" allow-connection="true"> </ddl-generator>
+ <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
+ <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
+ <play-pen zoom="1.0" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+  <table-pane table-ref="TAB1" x="40" y="40" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB2" x="40" y="220" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB3" x="40" y="360" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB4" x="360" y="40" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB5" x="360" y="140" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB6" x="360" y="240" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB7" x="650" y="80" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB8" x="40" y="520" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB9" x="650" y="360" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB10" x="360" y="420" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB11" x="650" y="560" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB12" x="360" y="660" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB13" x="40" y="700" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-link relationship-ref="REL1" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL2" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL3" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL4" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL5" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL6" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL7" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL8" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL9" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL10" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="33"/>
+ </play-pen>
+ <profiles topNCount="10"/>
+</architect-project>

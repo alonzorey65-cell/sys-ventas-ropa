@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="bp" prefHeight="650.0" prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pe.edu.upeu.controller.MainGuiController">
+    <top>
+        <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <!-- Menús organizados para tus nuevos paneles -->
+                        <MenuItem fx:id="menuItemProducto" mnemonicParsing="false" text="Producto" />
+                        <MenuItem fx:id="menuItemVenta" mnemonicParsing="false" text="Venta" />
+                        <MenuItem fx:id="menuItemComprobante" mnemonicParsing="false" text="Comprobante" />
+                        <MenuItem fx:id="menuItemClose" mnemonicParsing="false" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <center>
+        <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0"
+                 tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER">
+            <tabs>
+                <Tab text="Pantalla Principal" closable="false" />
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>

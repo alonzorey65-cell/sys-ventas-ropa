@@ -1,0 +1,111 @@
+/* Tema claro y legible para Sys.Ventas */
+.root {
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-base: #f4f7fb;
+    -fx-background-color: linear-gradient(to bottom, #f7f9fc, #eef3f9);
+    -fx-text-fill: #1f2937;
+}
+
+.label {
+    -fx-text-fill: #1f2937;
+}
+
+.text-field, .password-field, .combo-box-base, .text-area {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #111827;
+    -fx-prompt-text-fill: #6b7280;
+    -fx-background-radius: 6px;
+    -fx-border-color: #cfd8e3;
+    -fx-border-radius: 6px;
+    -fx-padding: 7px 10px;
+}
+
+.text-field:focused, .password-field:focused, .combo-box-base:focused, .text-area:focused {
+    -fx-border-color: #2563eb;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.15), 8, 0.2, 0, 0);
+}
+
+.button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 14px;
+    -fx-cursor: hand;
+}
+.button:hover { -fx-background-color: #1d4ed8; }
+.button:pressed { -fx-background-color: #1e40af; }
+
+.button-danger, .danger {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+}
+.button-danger:hover, .danger:hover { -fx-background-color: #b91c1c; }
+
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d7deea;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+.table-view .column-header-background {
+    -fx-background-color: #e8eef8;
+    -fx-background-radius: 8px 8px 0 0;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 34px;
+    -fx-border-color: transparent transparent #d7deea transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #1f2937;
+    -fx-font-weight: bold;
+}
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1f2937;
+    -fx-cell-size: 32px;
+}
+.table-row-cell:odd { -fx-background-color: #f8fbff; }
+.table-row-cell:selected {
+    -fx-background-color: #cfe0ff;
+    -fx-text-fill: #111827;
+}
+.table-cell { -fx-text-fill: #1f2937; }
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #e8eef8;
+}
+.tab-pane .tab {
+    -fx-background-color: #dbe7f7;
+    -fx-background-radius: 6 6 0 0;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: #ffffff;
+}
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #1f2937;
+    -fx-font-weight: bold;
+}
+
+.menu-bar {
+    -fx-background-color: #1f3b63;
+}
+.menu-bar .label { -fx-text-fill: white; }
+.context-menu {
+    -fx-background-color: #ffffff;
+}
+.context-menu .label { -fx-text-fill: #1f2937; }
+
+.scroll-pane, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+#loginPane {
+    -fx-background-color: linear-gradient(to bottom right, #f8fbff, #eaf2ff);
+}
+#miContenedor {
+    -fx-background-color: transparent;
+}
