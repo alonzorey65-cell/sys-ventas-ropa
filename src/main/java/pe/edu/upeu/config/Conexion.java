@@ -9,7 +9,8 @@ import java.sql.SQLException;
  * ABSTRACCIÓN/ENCAPSULAMIENTO: oculta los detalles del pool y configuración delegando en DatabaseConfig;
  *        las demás capas piden una conexión sin conocer cómo se crea internamente.
  * MÉTODO: obtenerConexion() expone el comportamiento necesario para la capa repositorio.
- * CONEXIÓN: Repositorios -> Conexion.obtenerConexion() -> DatabaseConfig/HikariCP -> Neon PostgreSQL.
+ * PATRÓN FACADE: simplifica el uso del subsistema de conexión.
+ * CONEXIÓN: Repositorios -> Conexion.obtenerConexion() -> DatabaseConfig/HikariCP -> BD configurada.
  */
 public class Conexion { // CLASE fachada de conexión (capa infraestructura)
 

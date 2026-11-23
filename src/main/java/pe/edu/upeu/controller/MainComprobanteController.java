@@ -12,11 +12,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import pe.edu.upeu.components.comprob.ComprobantePdfService;
 import pe.edu.upeu.components.comprob.ComprobanteView;
+import pe.edu.upeu.dto.SessionManager;
 import pe.edu.upeu.dto.comprobante.Comprobante;
 import pe.edu.upeu.model.Cliente;
 import pe.edu.upeu.model.Venta;
 import pe.edu.upeu.model.VentaDetalle;
 import pe.edu.upeu.service.IClienteService;
+import pe.edu.upeu.service.IProductoService;
 import pe.edu.upeu.service.IVentaDetalleService;
 import pe.edu.upeu.service.IVentaService;
 
@@ -42,11 +44,14 @@ public class MainComprobanteController {
     @FXML private TableColumn<Venta, String> colNumero;
     @FXML private TableColumn<Venta, String> colCliente;
     @FXML private TableColumn<Venta, Double> colTotal;
+    @FXML private TableColumn<Venta, String> colEstado;
+    @FXML private Button btnAnularVenta;
 
     private final ComprobantePdfService pdfService = new ComprobantePdfService();
     private final IVentaService ventaService;
     private final IVentaDetalleService ventaDetalleService;
     private final IClienteService clienteService;
+    private final IProductoService productoService;
 
     private final ObservableList<Venta> ventas = FXCollections.observableArrayList();
     private VBox vistaActual;
@@ -54,15 +59,23 @@ public class MainComprobanteController {
 
     public MainComprobanteController(IVentaService ventaService,
                                      IVentaDetalleService ventaDetalleService,
-                                     IClienteService clienteService) {
+                                     IClienteService clienteService,
+                                     IProductoService productoService) {
         this.ventaService = ventaService;
         this.ventaDetalleService = ventaDetalleService;
         this.clienteService = clienteService;
+        this.productoService = productoService;
+    }
+
+    public MainComprobanteController(IVentaService ventaService,
+                                     IVentaDetalleService ventaDetalleService,
+                                     IClienteService clienteService) {
+        this(ventaService, ventaDetalleService, clienteService, null);
     }
 
     // Fallback
     public MainComprobanteController() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
     @FXML
@@ -86,6 +99,7 @@ public class MainComprobanteController {
         if (colNumero != null) colNumero.setCellValueFactory(c -> new SimpleStringProperty(nvl(c.getValue().getNroComprobante())));
         if (colTotal != null) colTotal.setCellValueFactory(c -> new javafx.beans.property.SimpleObjectProperty<>(c.getValue().getTotal()));
         if (colCliente != null) colCliente.setCellValueFactory(c -> new SimpleStringProperty(nombreCliente(c.getValue().getIdCliente())));
+        if (colEstado != null) colEstado.setCellValueFactory(c -> new SimpleStringProperty(nvl(c.getValue().getEstado()).isBlank() ? "ACTIVO" : c.getValue().getEstado()));
         tableVentas.setItems(ventas);
         tableVentas.setOnMouseClicked(e -> { if (e.getClickCount() == 2) verComprobanteSeleccionado(); });
     }
@@ -128,7 +142,16 @@ public class MainComprobanteController {
     private Comprobante construirComprobanteDesdeVenta(Venta v) {
         String clienteNombre = nombreCliente(v.getIdCliente());
         String clienteDoc = "";
-        try { if (v.getIdCliente() != null && clienteService != null) { Cliente c = clienteService.buscarPorId(v.getIdCliente()); if (c != null) clienteDoc = nvl(c.getDniRuc()); } } catch (Exception ignored) {}
+        String clienteDireccion = "";
+        try {
+            if (v.getIdCliente() != null && clienteService != null) {
+                Cliente c = clienteService.buscarPorId(v.getIdCliente());
+                if (c != null) {
+                    clienteDoc = nvl(c.getDniRuc());
+                    clienteDireccion = nvl(c.getDireccion());
+                }
+            }
+        } catch (Exception ignored) {}
         String fecha = v.getFecha() == null ? "" : v.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         List<Comprobante.DetalleItem> items = new ArrayList<>();
         try {
@@ -136,6 +159,15 @@ public class MainComprobanteController {
                 List<VentaDetalle> dets = ventaDetalleService.listarPorVenta(v.getIdVenta());
                 for (VentaDetalle d : dets) {
                     String desc = "Producto " + (d.getIdProducto() == null ? "" : d.getIdProducto());
+                    // Resolver nombre real del producto para que el comprobante muestre descripción clara
+                    if (d.getIdProducto() != null && productoService != null) {
+                        try {
+                            var p = productoService.buscarPorId(d.getIdProducto());
+                            if (p != null && p.getNombre() != null && !p.getNombre().isBlank()) {
+                                desc = p.getNombre();
+                            }
+                        } catch (Exception ignored) {}
+                    }
                     int cant = d.getCantidad() == null ? 0 : d.getCantidad().intValue();
                     double pu = d.getPrecio() == null ? 0 : d.getPrecio();
                     double sub = d.getSubtotal() == null ? 0 : d.getSubtotal();
@@ -143,8 +175,36 @@ public class MainComprobanteController {
                 }
             }
         } catch (Exception ignored) {}
-        return new Comprobante(nvl(v.getSerie()), nvl(v.getNroComprobante()), fecha, clienteNombre, clienteDoc,
+        Comprobante c = new Comprobante(nvl(v.getSerie()), nvl(v.getNroComprobante()), fecha, clienteNombre, clienteDoc, clienteDireccion,
                 v.getTotal() == null ? 0 : v.getTotal(), items);
+        c.setEstado(v.getEstado());
+        return c;
+    }
+
+    @FXML
+    public void anularVentaSeleccionada() {
+        if (tableVentas == null) return;
+        Venta v = tableVentas.getSelectionModel().getSelectedItem();
+        if (v == null) { mostrarInfo("Seleccione una venta para anular."); return; }
+        if ("ANULADO".equalsIgnoreCase(v.getEstado())) { mostrarInfo("La venta ya está anulada."); return; }
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Anular venta");
+        dialog.setHeaderText("Anular venta " + nvl(v.getSerie()) + "-" + nvl(v.getNroComprobante()));
+        dialog.setContentText("Motivo de anulación:");
+        var res = dialog.showAndWait();
+        if (res.isEmpty() || res.get().trim().isEmpty()) { mostrarInfo("Debe ingresar un motivo de anulación."); return; }
+        try {
+            Long userId = SessionManager.getInstance().getUserId();
+            boolean ok = ventaService.anular(v.getIdVenta(), res.get().trim(), userId);
+            if (ok) {
+                listarVentas();
+                mostrarInfo("Venta anulada correctamente. Stock restaurado.");
+            } else {
+                mostrarError("Error", "No se pudo anular la venta", "Verifique el estado de la venta.");
+            }
+        } catch (Exception e) {
+            mostrarError("Error", "No se pudo anular la venta", e.getMessage());
+        }
     }
 
     @FXML

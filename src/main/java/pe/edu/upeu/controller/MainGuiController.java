@@ -25,6 +25,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 
+/**
+ * POO - CONTROLADOR PRINCIPAL (MVC):
+ * - ENCAPSULAMIENTO: atributos privados/@FXML; lógica interna oculta.
+ * - ABSTRACCIÓN: delega en servicios/DAO (IMenuMenuItemDao) y utilidades.
+ * - POLIMORFISMO: usa interfaces/abstracciones y maneja eventos.
+ * - SINGLETON (uso): SessionManager.getInstance() para sesión; AppContext.getInstance() para beans.
+ * - COMPOSICIÓN: coordina MenuBar, TabPane, menús dinámicos y apertura de vistas FXML.
+ */
 public class MainGuiController {
 
     @FXML BorderPane bp;
@@ -137,6 +145,10 @@ public class MainGuiController {
 
         // Menú base (File) con textos traducibles
         Menu fileMenu = new Menu(tr("menu.archivo", "Archivo"));
+        MenuItem miPanelAdmin = new MenuItem("Panel Administrador");
+        miPanelAdmin.setOnAction(e -> abrirTabPaneFXML("/view/main_admin.fxml", "Panel Administrador"));
+        MenuItem miPanel = new MenuItem("Panel Vendedor");
+        miPanel.setOnAction(e -> abrirTabPaneFXML("/view/main_vendedor.fxml", "Panel Vendedor"));
         MenuItem miProd = new MenuItem(tr("menu.inventario", "Productos"));
         miProd.setOnAction(e -> abrirTabPaneFXML("/view/main_producto.fxml", tr("menu.inventario", "Productos")));
         MenuItem miVenta = new MenuItem(tr("menu.ventas", "Ventas"));
@@ -149,6 +161,8 @@ public class MainGuiController {
                 ((Stage) bp.getScene().getWindow()).close();
             }
         });
+        if (tieneAcceso("/view/main_admin.fxml")) fileMenu.getItems().add(miPanelAdmin);
+        if (tieneAcceso("/view/main_vendedor.fxml")) fileMenu.getItems().add(miPanel);
         if (tieneAcceso("/view/main_producto.fxml")) fileMenu.getItems().add(miProd);
         if (tieneAcceso("/view/main_venta.fxml")) fileMenu.getItems().add(miVenta);
         if (tieneAcceso("/view/main_comprobante.fxml")) fileMenu.getItems().add(miComp);
@@ -194,6 +208,15 @@ public class MainGuiController {
         if (tabPane != null && !tabPane.getTabs().isEmpty()) {
             Tab t0 = tabPane.getTabs().get(0);
             if (t0 != null) t0.setText(tr("label.bienvenido", "Pantalla Principal"));
+        }
+        // Abrir panel vendedor por defecto para perfil vendedor
+        String perfil = SessionManager.getInstance().getUserPerfil();
+        String p = perfil == null ? "" : perfil.trim().toUpperCase();
+        boolean esVendedor = p.equals("2") || p.equals("VENDEDOR");
+        boolean esAdmin = p.equals("1") || p.equals("ADMIN") || p.equals("ADMINISTRADOR");
+        if (tabPane != null && tabPane.getTabs().size() <= 1) {
+            if (esVendedor) abrirTabPaneFXML("/view/main_vendedor.fxml", "Panel Vendedor");
+            else if (esAdmin) abrirTabPaneFXML("/view/main_admin.fxml", "Panel Administrador");
         }
     }
 
@@ -261,7 +284,8 @@ public class MainGuiController {
         boolean esVendedor = p.equals("2") || p.equals("VENDEDOR");
         if (esAdmin) return true;
         if (esVendedor) {
-            return fxmlPath.contains("main_venta.fxml")
+            return fxmlPath.contains("main_vendedor.fxml")
+                    || fxmlPath.contains("main_venta.fxml")
                     || fxmlPath.contains("main_comprobante.fxml")
                     || fxmlPath.contains("login.fxml");
         }

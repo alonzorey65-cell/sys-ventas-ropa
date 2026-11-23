@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.controller.VendedorController">
+  <children>
+    <VBox spacing="14" AnchorPane.topAnchor="12" AnchorPane.leftAnchor="12" AnchorPane.rightAnchor="12" AnchorPane.bottomAnchor="12">
+      <children>
+        <HBox alignment="CENTER_LEFT" spacing="12">
+          <children>
+            <VBox spacing="2">
+              <Label fx:id="lblBienvenida" text="Panel del Vendedor"><font><Font name="System Bold" size="24"/></font></Label>
+              <Label text="Resumen rápido de tu actividad y accesos a ventas." textFill="#6b7280"/>
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Refrescar" onAction="#refrescar"/>
+            <Button text="Nueva Venta" onAction="#abrirVentas" style="-fx-background-color:#2563eb; -fx-text-fill:white; -fx-font-weight:bold;"/>
+            <Button text="Comprobantes" onAction="#abrirComprobantes"/>
+          </children>
+        </HBox>
+
+        <HBox spacing="12">
+          <children>
+            <VBox spacing="4" prefWidth="180" style="-fx-background-color:white; -fx-background-radius:10; -fx-border-color:#e5e7eb; -fx-border-radius:10; -fx-padding:14;">
+              <Label text="Ventas hoy" textFill="#6b7280"/><Label fx:id="lblVentasHoy" text="0"><font><Font name="System Bold" size="28"/></font></Label>
+            </VBox>
+            <VBox spacing="4" prefWidth="200" style="-fx-background-color:white; -fx-background-radius:10; -fx-border-color:#e5e7eb; -fx-border-radius:10; -fx-padding:14;">
+              <Label text="Total vendido hoy" textFill="#6b7280"/><Label fx:id="lblTotalHoy" text="S/ 0.00" textFill="#059669"><font><Font name="System Bold" size="28"/></font></Label>
+            </VBox>
+            <VBox spacing="4" prefWidth="180" style="-fx-background-color:white; -fx-background-radius:10; -fx-border-color:#e5e7eb; -fx-border-radius:10; -fx-padding:14;">
+              <Label text="Mis ventas" textFill="#6b7280"/><Label fx:id="lblMisVentas" text="0"><font><Font name="System Bold" size="28"/></font></Label>
+            </VBox>
+            <VBox spacing="4" prefWidth="160" style="-fx-background-color:white; -fx-background-radius:10; -fx-border-color:#e5e7eb; -fx-border-radius:10; -fx-padding:14;">
+              <Label text="Anuladas hoy" textFill="#6b7280"/><Label fx:id="lblAnuladasHoy" text="0" textFill="#f59e0b"><font><Font name="System Bold" size="28"/></font></Label>
+            </VBox>
+            <VBox spacing="4" prefWidth="180" style="-fx-background-color:white; -fx-background-radius:10; -fx-border-color:#e5e7eb; -fx-border-radius:10; -fx-padding:14;">
+              <Label text="Ticket promedio" textFill="#6b7280"/><Label fx:id="lblTicketProm" text="S/ 0.00" textFill="#2563eb"><font><Font name="System Bold" size="28"/></font></Label>
+            </VBox>
+          </children>
+        </HBox>
+
+        <Label text="Mis últimas ventas" ><font><Font name="System Bold" size="15"/></font></Label>
+        <TableView fx:id="tableVentas" VBox.vgrow="ALWAYS">
+          <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="70"/>
+            <TableColumn fx:id="colFecha" text="Fecha" prefWidth="150"/>
+            <TableColumn fx:id="colSerie" text="Serie" prefWidth="80"/>
+            <TableColumn fx:id="colNumero" text="Número" prefWidth="100"/>
+            <TableColumn fx:id="colTotal" text="Total" prefWidth="100"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
+          </columns>
+        </TableView>
+        <Label fx:id="lblMsg" text="Listo." textFill="#166534"/>
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>

@@ -9,6 +9,7 @@ import pe.edu.upeu.repository.VentaDetalleRepository;
 import pe.edu.upeu.repository.VentaRepository;
 import pe.edu.upeu.service.IVentaService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,10 +60,51 @@ public class VentaServiceImp implements IVentaService {
     @Override
     public boolean eliminar(Long id) {
         try {
+            if (id == null) return false;
+            Venta v = ventaRepository.buscarPorId(id).orElse(null);
+            // Restaurar stock solo si la venta no estaba anulada (anulada ya restauró stock)
+            if (v == null || !"ANULADO".equalsIgnoreCase(v.getEstado())) {
+                restaurarStockVenta(id);
+            }
             ventaRepository.eliminar(id);
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    @Override
+    public boolean anular(Long id, String motivo, Long usuarioId) {
+        try {
+            if (id == null) return false;
+            Venta v = ventaRepository.buscarPorId(id).orElse(null);
+            if (v == null) return false;
+            if ("ANULADO".equalsIgnoreCase(v.getEstado())) return false;
+            restaurarStockVenta(id);
+            v.setEstado("ANULADO");
+            v.setMotivoAnulacion(motivo != null && !motivo.isBlank() ? motivo.trim() : "Sin motivo");
+            v.setFechaAnulacion(LocalDateTime.now());
+            v.setUsuarioAnulacion(usuarioId);
+            ventaRepository.modificar(v);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void restaurarStockVenta(Long idVenta) {
+        if (ventaDetalleRepository == null || productoRepository == null) return;
+        List<VentaDetalle> detalles = ventaDetalleRepository.listarTodos().stream()
+                .filter(d -> idVenta.equals(d.getIdVenta()))
+                .toList();
+        for (VentaDetalle det : detalles) {
+            if (det.getIdProducto() == null) continue;
+            productoRepository.buscarPorId(det.getIdProducto()).ifPresent(prod -> {
+                double actual = prod.getStock() != null ? prod.getStock() : 0;
+                double cant = det.getCantidad() != null ? det.getCantidad() : 0;
+                prod.setStock(actual + cant);
+                productoRepository.modificar(prod);
+            });
         }
     }
 

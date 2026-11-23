@@ -17,6 +17,7 @@
                     <children>
                         <Button fx:id="btnRefrescar" mnemonicParsing="false" onAction="#listarVentas" text="Refrescar" />
                         <Button fx:id="btnVer" mnemonicParsing="false" onAction="#verComprobanteSeleccionado" text="Ver comprobante" />
+                        <Button fx:id="btnAnularVenta" mnemonicParsing="false" onAction="#anularVentaSeleccionada" text="Anular venta" />
                         <Button fx:id="btnEliminarVenta" mnemonicParsing="false" onAction="#eliminarVentaSeleccionada" text="Eliminar venta" />
                         <Pane HBox.hgrow="ALWAYS" />
                         <Button fx:id="btnExportarPdf" mnemonicParsing="false" onAction="#onExportarPdf" prefHeight="32.0" prefWidth="130.0" text="Exportar PDF" />
@@ -37,6 +38,7 @@
                                         <TableColumn fx:id="colNumero" prefWidth="100.0" text="Número" />
                                         <TableColumn fx:id="colCliente" prefWidth="160.0" text="Cliente" />
                                         <TableColumn fx:id="colTotal" prefWidth="90.0" text="Total" />
+                                        <TableColumn fx:id="colEstado" prefWidth="90.0" text="Estado" />
                                     </columns>
                                 </TableView>
                             </children>

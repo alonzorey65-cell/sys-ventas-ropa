@@ -19,6 +19,8 @@ public interface IVentaService {
 
     boolean eliminar(Long id);
 
+    boolean anular(Long id, String motivo, Long usuarioId);
+
     Venta save(Venta entity);
 
     Venta update(Venta entity);

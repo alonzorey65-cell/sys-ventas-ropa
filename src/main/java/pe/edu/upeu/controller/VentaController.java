@@ -485,7 +485,9 @@ public class VentaController { // CLASE controladora de ventas (POO + integraciÃ
 
             String fechaStr = fecha.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             ultimoComprobante = new Comprobante(serie, nro, fechaStr,
-                    nvl(clienteSeleccionado.getNombre()), nvl(clienteSeleccionado.getDniRuc()), total, itemsComp);
+                    nvl(clienteSeleccionado.getNombre()), nvl(clienteSeleccionado.getDniRuc()),
+                    nvl(clienteSeleccionado.getDireccion()), total, itemsComp);
+            ultimoComprobante.setEstado("ACTIVO");
 
             carrito.clear();
             cargarProductos();
@@ -546,13 +548,24 @@ public class VentaController { // CLASE controladora de ventas (POO + integraciÃ
                 String fechaStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                 ultimoComprobante = new Comprobante("B001", "PREV", fechaStr,
                         clienteSeleccionado != null ? nvl(clienteSeleccionado.getNombre()) : "PÃºblico General",
-                        clienteSeleccionado != null ? nvl(clienteSeleccionado.getDniRuc()) : "", total, itemsComp);
+                        clienteSeleccionado != null ? nvl(clienteSeleccionado.getDniRuc()) : "",
+                        clienteSeleccionado != null ? nvl(clienteSeleccionado.getDireccion()) : "", total, itemsComp);
             }
 
             URL fxmlUrl = getClass().getResource("/view/main_comprobante.fxml");
             if (fxmlUrl == null) { toast("No se encontrÃ³ la vista de comprobante", true); return; }
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
-            loader.setControllerFactory(AppContext.getInstance()::getBean);
+            // Usar instancia fresca para evitar conflicto de singleton al abrir en ventana nueva
+            loader.setControllerFactory(cls -> {
+                if (cls == MainComprobanteController.class) {
+                    return new MainComprobanteController(
+                            AppContext.getInstance().getBean(pe.edu.upeu.service.IVentaService.class),
+                            AppContext.getInstance().getBean(pe.edu.upeu.service.IVentaDetalleService.class),
+                            AppContext.getInstance().getBean(pe.edu.upeu.service.IClienteService.class),
+                            AppContext.getInstance().getBean(pe.edu.upeu.service.IProductoService.class));
+                }
+                return AppContext.getInstance().getBean(cls);
+            });
             var root = loader.load();
             Object ctrl = loader.getController();
             if (ctrl instanceof MainComprobanteController mcc) {

@@ -11,18 +11,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
- * ========================= POO y CONEXIÓN entre componentes =========================
+ * ========================= POO y PATRONES =========================
  * CLASE: AppContext centraliza la creación y entrega de componentes del sistema.
- * OBJETOS: crea instancias (objetos) de repositorios, servicios y controladores con "new ..." y
- *        las guarda en un contenedor (Map) para reutilizarlas.
- * ENCAPSULAMIENTO: el contenedor es private y el constructor es privado (control de creación).
- * ABSTRACCIÓN/POLIMORFISMO: registra y resuelve por tipos/interfaces (ej. IProductoService),
- *        permitiendo que el resto del sistema dependa de abstracciones.
- * CONEXIÓN (inyección/composición): aquí se "conectan" las capas:
- *        Repository (BD) -> Service (lógica) -> Controller (UI), y utilidades como ConsultaDNI.
- * PATRÓN relacionado: Singleton (una sola instancia de AppContext) + contenedor simple de beans.
+ * PATRÓN SINGLETON (aplicado aquí): una sola instancia global de AppContext.
+ *   - `private static AppContext instance;`
+ *   - constructor `private AppContext()` evita instanciación externa
+ *   - `getInstance()` sincronizado devuelve siempre la misma instancia.
+ * PATRÓN IoC/DI simple (contenedor de beans): registra y entrega objetos por tipo.
+ * OBJETOS: crea instancias de repositorios, servicios y controladores con "new ...".
+ * ENCAPSULAMIENTO: el contenedor Map es private y el acceso se controla por métodos.
+ * ABSTRACCIÓN/POLIMORFISMO: resuelve por interfaces (ej. IProductoService), desacoplando capas.
+ * CONEXIÓN (inyección/composición): Repository (BD) -> Service (lógica) -> Controller (UI).
  */
-public class AppContext { // CLASE que integra/conecta objetos del sistema
+public class AppContext { // SINGLETON + contenedor IoC de la aplicación
 
     private static AppContext instance;
 
@@ -81,6 +82,12 @@ public class AppContext { // CLASE que integra/conecta objetos del sistema
                 getBean(ICategoriaService.class),
                 getBean(IMarcaService.class),
                 getBean(IUnidadMedidaService.class)));
+        registrar(CategoriaController.class,   new CategoriaController(getBean(ICategoriaService.class)));
+        registrar(MarcaController.class,       new MarcaController(getBean(IMarcaService.class)));
+        registrar(UnidadMedidaController.class,new UnidadMedidaController(getBean(IUnidadMedidaService.class)));
+        registrar(ClienteController.class,     new ClienteController(getBean(IClienteService.class)));
+        registrar(UsuarioController.class,     new UsuarioController(getBean(IUsuarioService.class)));
+        registrar(VendedorController.class,    new VendedorController(getBean(IVentaService.class)));
         registrar(VentaController.class,   new VentaController(
                 getBean(IProductoService.class),
                 getBean(IClienteService.class),
@@ -89,7 +96,8 @@ public class AppContext { // CLASE que integra/conecta objetos del sistema
         registrar(MainComprobanteController.class, new MainComprobanteController(
                 getBean(IVentaService.class),
                 getBean(IVentaDetalleService.class),
-                getBean(IClienteService.class)));
+                getBean(IClienteService.class),
+                getBean(IProductoService.class)));
     }
 
     private void registrar(Class<?> tipo, Object bean) {

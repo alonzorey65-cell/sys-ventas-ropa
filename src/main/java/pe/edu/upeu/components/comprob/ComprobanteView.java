@@ -24,6 +24,10 @@ public class ComprobanteView {
         String fecha = comprobante != null ? safe(comprobante.getFecha()) : "";
         String cliente = comprobante != null ? safe(comprobante.getClienteNombre()) : "Público General";
         String dni = comprobante != null ? safe(comprobante.getClienteDniRuc()) : "";
+        String direccion = comprobante != null ? safe(comprobante.getClienteDireccion()) : "";
+        String estado = comprobante != null ? safe(comprobante.getEstado()) : "ACTIVO";
+        if (estado.isBlank()) estado = "ACTIVO";
+        boolean anulado = "ANULADO".equalsIgnoreCase(estado);
         double total = comprobante != null ? comprobante.getTotal() : 0.0;
         double base = total / 1.18;
         double igv = total - base;
@@ -38,7 +42,8 @@ public class ComprobanteView {
         VBox header = new VBox(4);
         header.setPadding(new Insets(22, 22, 18, 22));
         header.setAlignment(Pos.CENTER_LEFT);
-        header.setStyle("-fx-background-color: linear-gradient(to right, #0f766e, #1d4ed8); -fx-background-radius: 14 14 0 0;");
+        header.setStyle("-fx-background-color: linear-gradient(to right, " +
+                (anulado ? "#991b1b, #dc2626" : "#0f766e, #1d4ed8") + "); -fx-background-radius: 14 14 0 0;");
 
         Label brand = new Label("SYSVENTAS");
         brand.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;");
@@ -47,8 +52,8 @@ public class ComprobanteView {
 
         HBox badgeRow = new HBox(10);
         badgeRow.setAlignment(Pos.CENTER_LEFT);
-        Label badge = new Label("BOLETA / COMPROBANTE");
-        badge.setStyle("-fx-background-color: rgba(255,255,255,0.18); -fx-text-fill: white; -fx-padding: 5 10; " +
+        Label badge = new Label(anulado ? "COMPROBANTE ANULADO" : "BOLETA / COMPROBANTE");
+        badge.setStyle("-fx-background-color: " + (anulado ? "rgba(239,68,68,0.35)" : "rgba(255,255,255,0.18)") + "; -fx-text-fill: white; -fx-padding: 5 10; " +
                 "-fx-background-radius: 999; -fx-font-size: 11px; -fx-font-weight: bold;");
         Region sp = new Region();
         HBox.setHgrow(sp, Priority.ALWAYS);
@@ -71,8 +76,9 @@ public class ComprobanteView {
 
         addInfo(info, 0, "Fecha", fecha);
         addInfo(info, 1, "Cliente", cliente.isBlank() ? "Público General" : cliente);
-        addInfo(info, 2, "DNI/RUC", dni.isBlank() ? "-" : dni);
-        addInfo(info, 3, "Estado", "PAGADO");
+        addInfo(info, 2, etiquetaDocumento(dni), dni.isBlank() ? "-" : dni);
+        addInfo(info, 3, "Dirección", direccion.isBlank() ? "-" : direccion);
+        addInfo(info, 4, "Estado", anulado ? "ANULADO" : "PAGADO");
 
         // Details
         VBox detailBox = new VBox(0);
@@ -135,13 +141,15 @@ public class ComprobanteView {
         HBox totalRow = new HBox();
         totalRow.setAlignment(Pos.CENTER_LEFT);
         totalRow.setPadding(new Insets(10, 12, 10, 12));
-        totalRow.setStyle("-fx-background-color: #ecfdf5; -fx-background-radius: 10; -fx-border-color: #a7f3d0; -fx-border-radius: 10;");
-        Label totalLbl = new Label("TOTAL PAGADO");
-        totalLbl.setStyle("-fx-text-fill: #065f46; -fx-font-weight: bold; -fx-font-size: 13px;");
+        totalRow.setStyle(anulado
+                ? "-fx-background-color: #fef2f2; -fx-background-radius: 10; -fx-border-color: #fecaca; -fx-border-radius: 10;"
+                : "-fx-background-color: #ecfdf5; -fx-background-radius: 10; -fx-border-color: #a7f3d0; -fx-border-radius: 10;");
+        Label totalLbl = new Label(anulado ? "TOTAL ANULADO" : "TOTAL PAGADO");
+        totalLbl.setStyle("-fx-text-fill: " + (anulado ? "#991b1b" : "#065f46") + "; -fx-font-weight: bold; -fx-font-size: 13px;");
         Region sp2 = new Region();
         HBox.setHgrow(sp2, Priority.ALWAYS);
         Label totalVal = new Label("S/ " + String.format(Locale.US, "%.2f", total));
-        totalVal.setStyle("-fx-text-fill: #065f46; -fx-font-weight: bold; -fx-font-size: 20px;");
+        totalVal.setStyle("-fx-text-fill: " + (anulado ? "#991b1b" : "#065f46") + "; -fx-font-weight: bold; -fx-font-size: 20px;");
         totalRow.getChildren().addAll(totalLbl, sp2, totalVal);
 
         totals.getChildren().addAll(sep, totalRow);
@@ -200,6 +208,13 @@ public class ComprobanteView {
         v.setStyle("-fx-text-fill: #111827; -fx-font-size: 12px;" + (bold ? "-fx-font-weight: bold;" : ""));
         row.getChildren().addAll(l, sp, v);
         return row;
+    }
+
+    private String etiquetaDocumento(String doc) {
+        String d = safe(doc).trim();
+        if (d.matches("\\d{11}")) return "RUC";
+        if (d.matches("\\d{8}")) return "DNI";
+        return "DNI/RUC";
     }
 
     private String money(double v) { return "S/ " + String.format(Locale.US, "%.2f", v); }

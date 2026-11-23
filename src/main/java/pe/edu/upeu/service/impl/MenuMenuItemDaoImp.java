@@ -40,9 +40,16 @@ public class MenuMenuItemDaoImp implements IMenuMenuItemDao {
 
         // Mapeo de rutas FXML vinculadas a los IDs de objetos devueltos por la BD
         map.put("mi1", new String[]{"/view/main_producto.fxml", "Productos", ""});
+        map.put("mi2", new String[]{"/view/main_categoria.fxml", "Categorías", ""});
         map.put("mi3", new String[]{"/view/main_venta.fxml", "Ventas / POS", ""});
         map.put("mi4", new String[]{"/view/main_comprobante.fxml", "Comprobantes", ""});
         map.put("mi5", new String[]{"/view/login.fxml", "Cerrar Sesión", "C"});
+        map.put("mi6", new String[]{"/view/main_marca.fxml", "Marcas", ""});
+        map.put("mi7", new String[]{"/view/main_unidadmedida.fxml", "Unidades de Medida", ""});
+        map.put("mi8", new String[]{"/view/main_cliente.fxml", "Clientes", ""});
+        map.put("mi9", new String[]{"/view/main_usuario.fxml", "Usuarios", ""});
+        map.put("mi10", new String[]{"/view/main_vendedor.fxml", "Panel Vendedor", ""});
+        map.put("mi11", new String[]{"/view/main_admin.fxml", "Panel Administrador", ""});
 
         return map;
     }

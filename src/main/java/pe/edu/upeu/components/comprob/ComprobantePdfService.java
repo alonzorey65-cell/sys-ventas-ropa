@@ -40,6 +40,7 @@ public class ComprobantePdfService {
         String fecha = safe(comprobante != null ? comprobante.getFecha() : "");
         String cliente = safe(comprobante != null ? comprobante.getClienteNombre() : "Público General");
         String dni = safe(comprobante != null ? comprobante.getClienteDniRuc() : "-");
+        String direccion = safe(comprobante != null ? comprobante.getClienteDireccion() : "-");
         double total = comprobante != null ? comprobante.getTotal() : 0.0;
         double base = total / 1.18;
         double igv = total - base;
@@ -55,8 +56,11 @@ public class ComprobantePdfService {
         info.setSpacingAfter(12);
         addInfoRow(info, "Fecha:", fecha, labelFont, valueFont);
         addInfoRow(info, "Cliente:", cliente.isBlank() ? "Público General" : cliente, labelFont, valueFont);
-        addInfoRow(info, "DNI/RUC:", dni.isBlank() ? "-" : dni, labelFont, valueFont);
-        addInfoRow(info, "Estado:", "PAGADO", labelFont, valueFont);
+        addInfoRow(info, etiquetaDocumento(dni) + ":", dni.isBlank() ? "-" : dni, labelFont, valueFont);
+        addInfoRow(info, "Dirección:", direccion.isBlank() ? "-" : direccion, labelFont, valueFont);
+        String estado = safe(comprobante != null ? comprobante.getEstado() : "ACTIVO");
+        if (estado.isBlank()) estado = "ACTIVO";
+        addInfoRow(info, "Estado:", "ANULADO".equalsIgnoreCase(estado) ? "ANULADO" : "PAGADO", labelFont, valueFont);
         document.add(info);
 
         PdfPTable table = new PdfPTable(4);
@@ -153,6 +157,13 @@ public class ComprobantePdfService {
         if (highlight) v.setBackgroundColor(new Color(236, 253, 245));
         table.addCell(l);
         table.addCell(v);
+    }
+
+    private String etiquetaDocumento(String doc) {
+        String d = safe(doc).trim();
+        if (d.matches("\\d{11}")) return "RUC";
+        if (d.matches("\\d{8}")) return "DNI";
+        return "DNI/RUC";
     }
 
     private String money(double v) { return String.format(Locale.US, "S/ %.2f", v); }

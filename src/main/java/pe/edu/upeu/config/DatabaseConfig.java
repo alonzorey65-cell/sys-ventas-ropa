@@ -19,8 +19,10 @@ import java.util.Properties;
  * - CLASE: encapsula la configuración y gestión del pool/conexión a BD.
  * - ENCAPSULAMIENTO: atributos y detalles internos (pool, propiedades) son privados; acceso por métodos.
  * - ABSTRACCIÓN: ofrece métodos como getConnection()/init()/shutdown() ocultando detalles de HikariCP.
+ * - SINGLETON/RECURSO ÚNICO (estilo): mantiene un único `HikariDataSource` estático compartido;
+ *   `init()` es synchronized y reutiliza la instancia si ya existe.
  * - MÉTODOS: init, getDataSource, getConnection, runScript, etc. implementan comportamientos.
- * CONEXIÓN: Conexion/Repositorios usan esta clase para conectarse a Neon PostgreSQL y ejecutar scripts.
+ * CONEXIÓN: Conexion/Repositorios usan esta clase para conectarse a la BD configurada (H2/Neon) y ejecutar scripts.
  */
 public final class DatabaseConfig { // CLASE de infraestructura para conexión BD
 

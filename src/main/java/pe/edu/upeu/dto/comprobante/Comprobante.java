@@ -8,17 +8,24 @@ public class Comprobante {
     private String fecha;
     private String clienteNombre;
     private String clienteDniRuc;
+    private String clienteDireccion;
     private double total;
     private List<DetalleItem> items;
+    private String estado;
 
     public Comprobante() {}
 
     public Comprobante(String serie, String numero, String fecha, String clienteNombre, String clienteDniRuc, double total, List<DetalleItem> items) {
+        this(serie, numero, fecha, clienteNombre, clienteDniRuc, "", total, items);
+    }
+
+    public Comprobante(String serie, String numero, String fecha, String clienteNombre, String clienteDniRuc, String clienteDireccion, double total, List<DetalleItem> items) {
         this.serie = serie;
         this.numero = numero;
         this.fecha = fecha;
         this.clienteNombre = clienteNombre;
         this.clienteDniRuc = clienteDniRuc;
+        this.clienteDireccion = clienteDireccion;
         this.total = total;
         this.items = items;
     }
@@ -38,11 +45,17 @@ public class Comprobante {
     public String getClienteDniRuc() { return clienteDniRuc; }
     public void setClienteDniRuc(String clienteDniRuc) { this.clienteDniRuc = clienteDniRuc; }
 
+    public String getClienteDireccion() { return clienteDireccion; }
+    public void setClienteDireccion(String clienteDireccion) { this.clienteDireccion = clienteDireccion; }
+
     public double getTotal() { return total; }
     public void setTotal(double total) { this.total = total; }
 
     public List<DetalleItem> getItems() { return items; }
     public void setItems(List<DetalleItem> items) { this.items = items; }
+
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
     public static class DetalleItem {
         private String descripcion;

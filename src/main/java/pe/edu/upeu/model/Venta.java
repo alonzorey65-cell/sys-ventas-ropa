@@ -19,4 +19,8 @@ public class Venta {
     private String tipoComprobante;
     private String serie;
     private String nroComprobante;
+    private String estado; // ACTIVO / ANULADO
+    private String motivoAnulacion;
+    private LocalDateTime fechaAnulacion;
+    private Long usuarioAnulacion;
 }
