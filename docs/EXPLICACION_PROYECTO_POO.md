@@ -97,10 +97,14 @@ flowchart LR
 
 ## 4) Paneles / pantallas (qué hace cada una)
 
+### 4.1 Vista general
+
 | Panel/FXML | Controlador | Función | Quién lo usa |
 |---|---|---|---|
 | `login.fxml` | `LoginController` | Autenticación de usuario. Valida credenciales y abre la app. | Todos |
 | `maingui.fxml` | `MainGuiController` | Contenedor principal, menú dinámico, tabs, navegación por perfil. | Admin/Vendedor |
+| `main_admin.fxml` *(referenciado por menú; verificar disponibilidad en resources)* | `AdminController` | Dashboard administrativo con KPIs, últimas ventas y accesos rápidos. | Admin |
+| `main_vendedor.fxml` | `VendedorController` | Dashboard del vendedor con métricas propias y accesos a POS/comprobantes. | Vendedor |
 | `main_producto.fxml` | `ProductoController` | CRUD de productos, combos de categoría/marca/unidad, filtro, tabla. | Admin |
 | `main_categoria.fxml` | `CategoriaController` | CRUD de categorías. | Admin |
 | `main_marca.fxml` | `MarcaController` | CRUD de marcas. | Admin |
@@ -109,9 +113,73 @@ flowchart LR
 | `main_usuario.fxml` | `UsuarioController` | Gestión de usuarios y perfiles. | Admin |
 | `main_venta.fxml` | `VentaController` | POS: buscar cliente/producto, carrito, totales, IGV, registrar venta, generar comprobante. | Admin/Vendedor |
 | `main_comprobante.fxml` | `MainComprobanteController` | Lista ventas/comprobantes, vista previa, PDF, impresión, anular/eliminar. | Admin/Vendedor |
-| `main_vendedor.fxml` | `VendedorController` | Panel/vista orientada a vendedor (según configuración de menú). | Vendedor |
 
 > Nota: el acceso real depende de los registros de la tabla `menu` y el perfil del usuario.
+
+### 4.2 Panel de Login (`login.fxml` + `LoginController`)
+
+**Objetivo:** permitir el ingreso seguro/básico al sistema y cargar la sesión del usuario.
+
+**Cómo funciona:**
+1. **Carga inicial:** `App.java` abre `login.fxml` al iniciar la aplicación (`App.java:18-25`).
+2. **Entrada de datos:** el usuario escribe usuario y contraseña en `txtUsuario` y `txtClave` (`LoginController.java:51-56`).
+3. **Validación de UI:** verifica que usuario no esté vacío, contraseña no esté vacía y tenga mínimo 3 caracteres; marca campos con error si falta algo (`LoginController.java:69-88`).
+4. **Autenticación:** llama a `IUsuarioService.loginUsuario(...)` (abstracción/polimorfismo; el controller no consulta SQL directamente) (`LoginController.java:90-97`).
+5. **Sesión:** si las credenciales son correctas, se guarda la información del usuario en `SessionManager` (Singleton) y se muestra bienvenida.
+6. **Navegación:** abre la ventana principal (`maingui.fxml` / `MainGuiController`), donde ya se cargan menús según perfil.
+7. **Feedback:** muestra mensajes de éxito/error mediante `Toast` (`LoginController.java:115-119`).
+
+**Conexión POO/capas:** Vista FXML → `LoginController` → `IUsuarioService` → `UsuarioServiceImp` → `UsuarioRepository` → BD.
+
+### 4.3 Panel Administrador (`main_admin.fxml` + `AdminController`)
+
+**Objetivo:** dar una vista rápida del estado del negocio y accesos directos a la gestión administrativa.
+
+**Cómo funciona:**
+1. **Inicialización:** al cargar, muestra "Panel Administrador - [usuario]" usando `SessionManager.getInstance().getUserName()` (`AdminController.java:50-61`).
+2. **Configuración de tabla:** configura columnas de ventas recientes (`id`, fecha, serie, número, total, estado) y enlaza la tabla al `ObservableList` (`AdminController.java:53-59`).
+3. **Carga de KPIs:** `refrescar()` consulta servicios para obtener métricas (`AdminController.java:63-87`):
+   - Ventas de hoy (no anuladas).
+   - Total vendido hoy.
+   - Cantidad de productos.
+   - Cantidad de clientes.
+   - Cantidad de usuarios.
+   - Productos con stock bajo (`stock <= 5`).
+   - Ventas anuladas hoy.
+4. **Ventas recientes:** muestra las últimas 15 ventas ordenadas por ID descendente (`AdminController.java:82`).
+5. **Accesos rápidos:** botones para abrir Productos, Clientes, Ventas/POS, Comprobantes y Usuarios (`AdminController.java:89-93`).
+6. **Apertura de tabs:** reutiliza el `TabPane` principal (`#tabPane`) y carga FXML con `AppContext` como `controllerFactory` para inyectar dependencias (`AdminController.java:95-111`).
+
+**Conexión POO/capas:** usa composición/inyección de `IVentaService`, `IProductoService`, `IClienteService`, `IUsuarioService`; no accede directo a BD.
+
+### 4.4 Panel Vendedor (`main_vendedor.fxml` + `VendedorController`)
+
+**Objetivo:** mostrar al vendedor su desempeño y darle acceso rápido a vender y revisar comprobantes.
+
+**Cómo funciona:**
+1. **Inicialización:** muestra bienvenida personalizada con el nombre del usuario en sesión (`VendedorController.java:41-52`).
+2. **Filtro por vendedor:** obtiene `userId` desde `SessionManager` y filtra ventas donde `idUsuario` coincide con el usuario logueado (`VendedorController.java:54-60`).
+3. **Carga de KPIs propios:** calcula y muestra (`VendedorController.java:60-71`):
+   - Ventas realizadas hoy.
+   - Total vendido hoy.
+   - Total de ventas propias históricas.
+   - Ventas anuladas hoy.
+   - Ticket promedio del día (`totalHoy / ventasHoy`).
+4. **Ventas recientes propias:** muestra hasta 20 ventas del vendedor, ordenadas por ID descendente (`VendedorController.java:70`).
+5. **Accesos rápidos:** abre solo Ventas/POS y Comprobantes (`VendedorController.java:77-78`), acorde a un rol con menos privilegios que admin.
+6. **Apertura de tabs:** igual patrón que Admin, usando `TabPane` principal y `AppContext` para crear/injectar controladores (`VendedorController.java:80-96`).
+
+**Conexión POO/capas:** depende de `IVentaService` (abstracción), usa `SessionManager` (Singleton) para identificar al vendedor y `AppContext` para navegación con DI.
+
+### 4.5 Contenedor principal (`maingui.fxml` + `MainGuiController`)
+
+**Objetivo:** ser la "shell" de la aplicación después del login.
+
+**Cómo funciona:**
+- Construye el menú según idioma, estilo y permisos/perfil del usuario (`MainGuiController.java:73-143`).
+- Carga accesos dinámicos desde BD mediante `IMenuMenuItemDao` y `SessionManager` (`MainGuiController.java:100-103`).
+- Abre vistas en `TabPane`, evitando duplicar tabs cuando ya existe.
+- Aplica cambios visuales (tema CSS) e idioma en tiempo de ejecución.
 
 ---
 
