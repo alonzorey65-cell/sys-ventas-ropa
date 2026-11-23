@@ -149,7 +149,11 @@ public class MainGuiController {
                 ((Stage) bp.getScene().getWindow()).close();
             }
         });
-        fileMenu.getItems().addAll(miProd, miVenta, miComp, new SeparatorMenuItem(), miClose);
+        if (tieneAcceso("/view/main_producto.fxml")) fileMenu.getItems().add(miProd);
+        if (tieneAcceso("/view/main_venta.fxml")) fileMenu.getItems().add(miVenta);
+        if (tieneAcceso("/view/main_comprobante.fxml")) fileMenu.getItems().add(miComp);
+        if (!fileMenu.getItems().isEmpty()) fileMenu.getItems().add(new SeparatorMenuItem());
+        fileMenu.getItems().add(miClose);
         menuBar.getMenus().add(fileMenu);
 
         // Menús dinámicos desde BD (traducidos por nombre conocido)
@@ -210,6 +214,13 @@ public class MainGuiController {
     // Método seguro para abrir cada vista en su pestaña respectiva sin duplicados
     private void abrirTabPaneFXML(String fxmlPath, String tittle) {
         try {
+            if (!tieneAcceso(fxmlPath)) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText("Acceso denegado");
+                alert.setContentText("Su rol/perfil no tiene permiso para acceder a este módulo.");
+                alert.showAndWait();
+                return;
+            }
             URL fxmlUrl = getClass().getResource(fxmlPath);
             if (fxmlUrl == null) {
                 System.err.println("No se encontró el archivo FXML en la ruta: " + fxmlPath);
@@ -240,6 +251,22 @@ public class MainGuiController {
         } catch (IOException ex){
             ex.printStackTrace();
         }
+    }
+
+    private boolean tieneAcceso(String fxmlPath) {
+        if (fxmlPath == null) return false;
+        String perfil = SessionManager.getInstance().getUserPerfil();
+        String p = perfil == null ? "1" : perfil.trim().toUpperCase();
+        boolean esAdmin = p.equals("1") || p.equals("ADMIN") || p.equals("ADMINISTRADOR");
+        boolean esVendedor = p.equals("2") || p.equals("VENDEDOR");
+        if (esAdmin) return true;
+        if (esVendedor) {
+            return fxmlPath.contains("main_venta.fxml")
+                    || fxmlPath.contains("main_comprobante.fxml")
+                    || fxmlPath.contains("login.fxml");
+        }
+        // Por defecto, solo vistas no administrativas básicas
+        return fxmlPath.contains("login.fxml");
     }
 
     class MenuItemListener {

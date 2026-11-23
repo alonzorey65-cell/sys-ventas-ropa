@@ -28,6 +28,8 @@ public class ConsultaDNI {
     }
 
     private String cargarToken() {
+        String env = System.getenv("APISPERU_TOKEN");
+        if (env != null && !env.isBlank()) return env.trim();
         try (InputStream in = ConsultaDNI.class.getResourceAsStream("/" + PROPS)) {
             if (in == null) return null;
             Properties p = new Properties();
@@ -35,7 +37,7 @@ public class ConsultaDNI {
             String t = p.getProperty("apisperu.token");
             if (t == null) t = p.getProperty("apisperu.apikey");
             if (t == null) t = p.getProperty("dni.api.token");
-            return t != null ? t.trim() : null;
+            return (t != null && !t.isBlank()) ? t.trim() : null;
         } catch (Exception e) {
             return null;
         }

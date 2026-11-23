@@ -67,13 +67,20 @@ public class AppContext { // CLASE que integra/conecta objetos del sistema
 
         registrar(IVentaCarritoService.class, new VentaCarritoServiceImp( getBean(VentCarritoRepository.class)));
         registrar(IVentaDetalleService.class, new VentaDetalleServiceImp( getBean(VentaDetalleRepository.class)));
-        registrar(IVentaService.class,        new VentaServiceImp(        getBean(VentaRepository.class)));
+        registrar(IVentaService.class,        new VentaServiceImp(
+                getBean(VentaRepository.class),
+                getBean(VentaDetalleRepository.class),
+                getBean(ProductoRepository.class)));
     }
 
     private void registrarControladores() {
         registrar(MainGuiController.class, new MainGuiController(getBean(IMenuMenuItemDao.class)));
         registrar(LoginController.class,   new LoginController(getBean(IUsuarioService.class)));
-        registrar(ProductoController.class,new ProductoController(getBean(IProductoService.class)));
+        registrar(ProductoController.class, new ProductoController(
+                getBean(IProductoService.class),
+                getBean(ICategoriaService.class),
+                getBean(IMarcaService.class),
+                getBean(IUnidadMedidaService.class)));
         registrar(VentaController.class,   new VentaController(
                 getBean(IProductoService.class),
                 getBean(IClienteService.class),

@@ -104,16 +104,31 @@ public final class DatabaseConfig { // CLASE de infraestructura para conexión B
     }
 
     private static Properties loadProperties() {
+        Properties props = new Properties();
         try (InputStream in = DatabaseConfig.class.getResourceAsStream("/" + PROPERTIES_FILE)) {
-            if (in == null) {
+            if (in != null) {
+                props.load(in);
+            } else {
                 LOG.warn("No se encontró {} en resources. Usando valores por defecto.", PROPERTIES_FILE);
-                return new Properties();
             }
-            Properties props = new Properties();
-            props.load(in);
-            return props;
         } catch (IOException e) {
             throw new IllegalStateException("Error leyendo " + PROPERTIES_FILE, e);
+        }
+        // Permite externalizar configuración por variables de entorno
+        overrideFromEnv(props, "db.url", "DB_URL");
+        overrideFromEnv(props, "db.username", "DB_USERNAME");
+        overrideFromEnv(props, "db.password", "DB_PASSWORD");
+        overrideFromEnv(props, "db.driver", "DB_DRIVER");
+        overrideFromEnv(props, "db.ddl.auto", "DB_DDL_AUTO");
+        overrideFromEnv(props, "db.ddl.script", "DB_DDL_SCRIPT");
+        overrideFromEnv(props, "apisperu.token", "APISPERU_TOKEN");
+        return props;
+    }
+
+    private static void overrideFromEnv(Properties props, String key, String envName) {
+        String value = System.getenv(envName);
+        if (value != null && !value.isBlank()) {
+            props.setProperty(key, value.trim());
         }
     }
 

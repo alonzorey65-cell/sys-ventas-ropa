@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -111,6 +112,7 @@ public class VentaController { // CLASE controladora de ventas (POO + integraci√
                 txtDescuento.textProperty().addListener((o, a, b) -> actualizarTotales());
             }
             if (cantidadPro != null) cantidadPro.setText("1");
+            aplicarValidacionesCampos();
 
             // B√∫squeda autom√°tica simple de cliente por DNI/RUC
             if (dniRuc != null) {
@@ -263,22 +265,39 @@ public class VentaController { // CLASE controladora de ventas (POO + integraci√
             if ((doc == null || doc.isBlank()) && autocompCliente != null) doc = autocompCliente.getText();
             String nombre = razonSocial != null ? razonSocial.getText() : null;
             String dir = txtDireccion != null ? txtDireccion.getText() : null;
-            if (doc == null || doc.isBlank() || nombre == null || nombre.isBlank()) {
-                toast("Ingrese DNI/RUC y nombre del cliente", true);
+
+            if (doc == null || doc.trim().isEmpty()) {
+                marcarCampo(dniRuc, true);
+                toast("Ingrese el DNI/RUC del cliente.", true);
                 return;
             }
-            Cliente existente = clienteService.buscarPorDniRuc(doc.trim());
+            doc = doc.trim();
+            if (!doc.matches("\\d{8}|\\d{11}")) {
+                marcarCampo(dniRuc, true);
+                toast("DNI debe tener 8 d√≠gitos o RUC 11 d√≠gitos.", true);
+                return;
+            }
+            marcarCampo(dniRuc, false);
+
+            if (nombre == null || nombre.trim().isEmpty()) {
+                marcarCampo(razonSocial, true);
+                toast("Ingrese el nombre o raz√≥n social del cliente.", true);
+                return;
+            }
+            marcarCampo(razonSocial, false);
+
+            Cliente existente = clienteService.buscarPorDniRuc(doc);
             Cliente c = existente != null ? existente : new Cliente();
-            c.setDniRuc(doc.trim());
+            c.setDniRuc(doc);
             c.setNombre(nombre.trim());
             c.setDireccion(dir != null ? dir.trim() : "");
             if (c.getTelefono() == null) c.setTelefono("");
             Cliente guardado = existente == null ? clienteService.guardar(c) : clienteService.actualizar(existente.getIdCliente(), c);
             if (guardado != null) {
                 seleccionarCliente(guardado);
-                toast(existente == null ? "Cliente registrado" : "Cliente actualizado", false);
+                toast(existente == null ? "Cliente registrado correctamente." : "Cliente actualizado correctamente.", false);
             } else {
-                toast("No se pudo guardar el cliente", true);
+                toast("No se pudo guardar el cliente.", true);
             }
         } catch (Exception e) {
             toast("Error al guardar cliente: " + e.getMessage(), true);
@@ -332,12 +351,21 @@ public class VentaController { // CLASE controladora de ventas (POO + integraci√
                 return;
             }
             double cantidad = parseDouble(cantidadPro != null ? cantidadPro.getText() : "0", 0);
-            if (cantidad <= 0) { toast("Ingrese una cantidad v√°lida", true); return; }
+            if (cantidad <= 0) {
+                marcarCampo(cantidadPro, true);
+                toast("Ingrese una cantidad v√°lida mayor a 0.", true);
+                return;
+            }
+            marcarCampo(cantidadPro, false);
             double stock = productoSeleccionado.getStock() != null ? productoSeleccionado.getStock() : 0;
             // considerar lo ya agregado
             double ya = carrito.stream().filter(i -> i.getIdProducto().equals(productoSeleccionado.getIdProducto()))
                     .mapToDouble(CarritoItem::getCantidad).sum();
-            if (cantidad + ya > stock) { toast("Stock insuficiente. Disponible: " + (stock - ya), true); return; }
+            if (cantidad + ya > stock) {
+                marcarCampo(cantidadPro, true);
+                toast("Stock insuficiente. Disponible: " + (stock - ya), true);
+                return;
+            }
             double pu = parseDouble(punitPro != null ? punitPro.getText() : "0", productoSeleccionado.getPrecio() != null ? productoSeleccionado.getPrecio() : 0);
             double subtotal = cantidad * pu;
 
@@ -374,9 +402,29 @@ public class VentaController { // CLASE controladora de ventas (POO + integraci√
 
     private void actualizarTotales() {
         double total = carrito.stream().mapToDouble(CarritoItem::getSubtotal).sum();
-        double descuento = parseDouble(txtDescuento != null ? txtDescuento.getText() : "0", 0);
-        if (descuento < 0) descuento = 0;
-        if (descuento > total) descuento = total;
+        double descuento = 0;
+        if (txtDescuento != null) {
+            String descTxt = txtDescuento.getText();
+            if (descTxt != null && !descTxt.trim().isEmpty()) {
+                try {
+                    descuento = Double.parseDouble(descTxt.replace(',', '.').trim());
+                    if (descuento < 0) {
+                        marcarCampo(txtDescuento, true);
+                        descuento = 0;
+                    } else if (descuento > total) {
+                        marcarCampo(txtDescuento, true);
+                        descuento = total;
+                    } else {
+                        marcarCampo(txtDescuento, false);
+                    }
+                } catch (NumberFormatException e) {
+                    marcarCampo(txtDescuento, true);
+                    descuento = 0;
+                }
+            } else {
+                marcarCampo(txtDescuento, false);
+            }
+        }
         double neto = total - descuento;
         double base = neto / 1.18;
         double igv = neto - base;
@@ -540,6 +588,44 @@ public class VentaController { // CLASE controladora de ventas (POO + integraci√
             }
         } catch (Exception ignored) { }
         System.out.println((error ? "[ERR] " : "[OK] ") + msg);
+    }
+
+    private void marcarCampo(TextField campo, boolean error) {
+        if (campo == null) return;
+        campo.setStyle(error
+                ? "-fx-border-color: #dc2626; -fx-border-width: 1.5; -fx-background-color: #fff5f5;"
+                : "");
+    }
+
+    private void aplicarValidacionesCampos() {
+        limitarDigitos(dniRuc, 11);
+        limitarDigitos(autocompCliente, 11);
+        limitarDecimal(cantidadPro, 8, 2);
+        limitarDecimal(punitPro, 10, 2);
+        limitarDecimal(txtDescuento, 10, 2);
+        if (razonSocial != null) {
+            razonSocial.textProperty().addListener((obs, o, n) -> { if (n != null && n.length() > 120) razonSocial.setText(o); });
+        }
+        if (txtDireccion != null) {
+            txtDireccion.textProperty().addListener((obs, o, n) -> { if (n != null && n.length() > 150) txtDireccion.setText(o); });
+        }
+    }
+
+    private void limitarDigitos(TextField field, int max) {
+        if (field == null) return;
+        field.setTextFormatter(new TextFormatter<>(change -> {
+            String n = change.getControlNewText();
+            return n.matches("\\d{0," + max + "}") ? change : null;
+        }));
+    }
+
+    private void limitarDecimal(TextField field, int enteros, int decimales) {
+        if (field == null) return;
+        field.setTextFormatter(new TextFormatter<>(change -> {
+            String n = change.getControlNewText();
+            if (n.isEmpty()) return change;
+            return n.matches("\\d{0," + enteros + "}([\\.,]\\d{0," + decimales + "})?") ? change : null;
+        }));
     }
 
     public static class CarritoItem {

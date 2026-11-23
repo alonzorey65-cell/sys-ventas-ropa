@@ -1,7 +1,11 @@
 package pe.edu.upeu.service.impl;
 
 import pe.edu.upeu.dto.comprobante.Comprobante;
+import pe.edu.upeu.model.Producto;
 import pe.edu.upeu.model.Venta;
+import pe.edu.upeu.model.VentaDetalle;
+import pe.edu.upeu.repository.ProductoRepository;
+import pe.edu.upeu.repository.VentaDetalleRepository;
 import pe.edu.upeu.repository.VentaRepository;
 import pe.edu.upeu.service.IVentaService;
 
@@ -11,9 +15,19 @@ import java.util.Optional;
 public class VentaServiceImp implements IVentaService {
 
     private final VentaRepository ventaRepository;
+    private final VentaDetalleRepository ventaDetalleRepository;
+    private final ProductoRepository productoRepository;
 
     public VentaServiceImp(VentaRepository ventaRepository) {
+        this(ventaRepository, null, null);
+    }
+
+    public VentaServiceImp(VentaRepository ventaRepository,
+                           VentaDetalleRepository ventaDetalleRepository,
+                           ProductoRepository productoRepository) {
         this.ventaRepository = ventaRepository;
+        this.ventaDetalleRepository = ventaDetalleRepository;
+        this.productoRepository = productoRepository;
     }
 
     @Override

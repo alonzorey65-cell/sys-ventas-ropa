@@ -60,28 +60,44 @@ public class LoginController { // CLASE controladora de autenticación
     }
 
     @FXML
-    public void login(ActionEvent e){
+    public void login(ActionEvent e) {
         try {
             if (u == null) {
                 this.u = AppContext.getInstance().getBean(IUsuarioService.class);
             }
 
-            String userText = txtUsuario != null ? txtUsuario.getText() : "";
-            String passText = txtClave != null ? txtClave.getText() : "";
+            String userText = txtUsuario != null ? txtUsuario.getText().trim() : "";
+            String passText = txtClave != null ? txtClave.getText().trim() : "";
 
-            if (userText.isEmpty() || passText.isEmpty()) {
-                mensajeError(e, "Por favor ingrese usuario y contraseña");
+            if (userText.isEmpty()) {
+                marcarCampo(txtUsuario, true);
+                mensajeError(e, "Ingrese su usuario.");
                 return;
             }
+            marcarCampo(txtUsuario, false);
+            if (passText.isEmpty()) {
+                marcarCampo(txtClave, true);
+                mensajeError(e, "Ingrese su contraseña.");
+                return;
+            }
+            if (passText.length() < 3) {
+                marcarCampo(txtClave, true);
+                mensajeError(e, "La contraseña debe tener al menos 3 caracteres.");
+                return;
+            }
+            marcarCampo(txtClave, false);
 
             u.loginUsuario(userText, passText)
                     .ifPresentOrElse(
-                            usu -> abrirMain(e, usu),
-                            () -> mensajeError(e, "Error en las credenciales... intente nuevamente!!")
+                            usu -> {
+                                mensajeOk(e, "Bienvenido, " + usu.getUsuario() + ".");
+                                abrirMain(e, usu);
+                            },
+                            () -> mensajeError(e, "Credenciales incorrectas. Verifique usuario y contraseña.")
                     );
 
         } catch (Exception ex) {
-            mensajeError(e, "Error al intentar iniciar sesión: " + ex.getMessage());
+            mensajeError(e, "Error al iniciar sesión: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -96,10 +112,23 @@ public class LoginController { // CLASE controladora de autenticación
         logout(e);
     }
 
-    public void mensajeError(ActionEvent e, String msg){
-        Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
-        double w = stage.getWidth() / 1.5, h = stage.getHeight() / 2;
-        Toast.showToast(stage, msg, "#FEA1B6", 2000, w, h);
+    public void mensajeError(ActionEvent e, String msg) {
+        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        double w = Math.max(280, stage.getWidth() - 40);
+        Toast.showToast(stage, msg, "#FCA5A5", 2200, w, 55);
+    }
+
+    public void mensajeOk(ActionEvent e, String msg) {
+        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        double w = Math.max(280, stage.getWidth() - 40);
+        Toast.showToast(stage, msg, "#86EFAC", 1500, w, 55);
+    }
+
+    private void marcarCampo(TextField campo, boolean error) {
+        if (campo == null) return;
+        campo.setStyle(error
+                ? "-fx-border-color: #dc2626; -fx-border-width: 1.5; -fx-background-color: #fff5f5;"
+                : "");
     }
 
     private void abrirMain(ActionEvent event, Usuario usu){
@@ -145,9 +174,11 @@ public class LoginController { // CLASE controladora de autenticación
     }
 
     @FXML
-    public void logout(ActionEvent e){
+    public void logout(ActionEvent e) {
+        try {
+            DatabaseConfig.shutdown();
+        } catch (Exception ignored) {
+        }
         Platform.exit();
-        System.exit(0);
-        DatabaseConfig.shutdown();
     }
 }

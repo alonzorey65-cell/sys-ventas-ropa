@@ -7,7 +7,7 @@ public class SessionManager {
     private String userName;
 
     private SessionManager() {
-        this.userPerfil = "ADMINISTRADOR"; // Valor por defecto
+        this.userPerfil = "1"; // Valor por defecto: Administrador
     }
 
     public static synchronized SessionManager getInstance() {

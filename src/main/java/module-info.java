@@ -17,8 +17,14 @@ module pe.edu.upeu {
     requires com.h2database;
     requires lombok;
 
-    // Aperturas para que JavaFX pueda inyectar los @FXML en los controladores
+    // Aperturas para JavaFX (FXML, PropertyValueFactory, binding)
     opens pe.edu.upeu.controller to javafx.fxml;
+    opens pe.edu.upeu.model to javafx.base, javafx.fxml;
+    opens pe.edu.upeu.dto to javafx.base, javafx.fxml;
+    opens pe.edu.upeu.dto.comprobante to javafx.base, javafx.fxml;
+    opens pe.edu.upeu.enums to javafx.base;
+    opens pe.edu.upeu.components to javafx.fxml;
+    opens pe.edu.upeu.components.comprob to javafx.fxml;
 
     // Exportaciones de paquetes para la arquitectura modular
     exports pe.edu.upeu;
@@ -26,6 +32,7 @@ module pe.edu.upeu {
     exports pe.edu.upeu.model;
     exports pe.edu.upeu.dto;
     exports pe.edu.upeu.dto.comprobante;
+    exports pe.edu.upeu.enums;
     exports pe.edu.upeu.utils;
     exports pe.edu.upeu.components;
     exports pe.edu.upeu.components.comprob;

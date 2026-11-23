@@ -6,6 +6,31 @@ DROP TABLE IF EXISTS cliente CASCADE;
 DROP TABLE IF EXISTS producto CASCADE;
 DROP TABLE IF EXISTS menu CASCADE;
 DROP TABLE IF EXISTS usuario CASCADE;
+DROP TABLE IF EXISTS unid_medida CASCADE;
+DROP TABLE IF EXISTS marca CASCADE;
+DROP TABLE IF EXISTS categoria CASCADE;
+DROP TABLE IF EXISTS perfil CASCADE;
+
+CREATE TABLE perfil (
+    id_perfil BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE categoria (
+    id_categoria BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE marca (
+    id_marca BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE unid_medida (
+    id_unid_medida BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    abreviatura VARCHAR(20)
+);
 
 CREATE TABLE usuario (
     id_usuario BIGSERIAL PRIMARY KEY,
@@ -72,12 +97,34 @@ CREATE TABLE venta_detalle (
 );
 
 -- Datos iniciales
-INSERT INTO usuario (username, password, id_perfil) VALUES ('admin', '123', 1);
+INSERT INTO perfil (nombre) VALUES ('ADMINISTRADOR');
+INSERT INTO perfil (nombre) VALUES ('VENDEDOR');
 
+INSERT INTO categoria (nombre) VALUES ('General');
+INSERT INTO categoria (nombre) VALUES ('Ropa Hombre');
+INSERT INTO categoria (nombre) VALUES ('Ropa Mujer');
+
+INSERT INTO marca (nombre) VALUES ('Genérica');
+INSERT INTO marca (nombre) VALUES ('Nike');
+INSERT INTO marca (nombre) VALUES ('Adidas');
+
+INSERT INTO unid_medida (nombre, abreviatura) VALUES ('Unidad', 'UND');
+INSERT INTO unid_medida (nombre, abreviatura) VALUES ('Caja', 'CJ');
+INSERT INTO unid_medida (nombre, abreviatura) VALUES ('Paquete', 'PQT');
+
+INSERT INTO usuario (username, password, id_perfil) VALUES ('admin', '123', 1);
+INSERT INTO usuario (username, password, id_perfil) VALUES ('vendedor', '123', 2);
+
+-- Menús ADMINISTRADOR (perfil 1)
 INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Almacén', 'Producto', '1', '1');
 INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Ventas', 'Registrar Venta / POS', '3', '1');
 INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Reportes', 'Comprobantes', '4', '1');
 INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Sesión', 'Cerrar Sesión', '5', '1');
+
+-- Menús VENDEDOR (perfil 2)
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Ventas', 'Registrar Venta / POS', '3', '2');
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Reportes', 'Comprobantes', '4', '2');
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Sesión', 'Cerrar Sesión', '5', '2');
 
 INSERT INTO producto (nombre, precio, stock, id_categoria, id_marca, id_unid_medida) VALUES
 ('Polo Casual Oversize Algodón', 45.00, 25, 1, 1, 1),

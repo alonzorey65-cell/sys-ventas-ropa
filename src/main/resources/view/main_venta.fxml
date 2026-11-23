@@ -96,7 +96,7 @@
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="nombreProducto" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <TextField fx:id="nombreProducto" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
@@ -106,7 +106,7 @@
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="codigoPro" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <TextField fx:id="codigoPro" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
@@ -116,7 +116,7 @@
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="stockPro" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <TextField fx:id="stockPro" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
@@ -146,7 +146,7 @@
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="preTPro" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                        <TextField fx:id="preTPro" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
@@ -188,13 +188,13 @@
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="txtBaseImp" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtBaseImp" editable="false" GridPane.rowIndex="1" />
                         <Label text="IGV" GridPane.columnIndex="1">
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="txtIgv" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <TextField fx:id="txtIgv" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
@@ -214,7 +214,7 @@
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="txtImporteT" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <TextField fx:id="txtImporteT" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
