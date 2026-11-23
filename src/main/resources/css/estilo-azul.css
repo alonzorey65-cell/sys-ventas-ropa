@@ -1,10 +1,13 @@
+/* Tema azul - overlay sobre style.css */
 .root {
-    -fx-base: #e6f2ff;
-    -fx-background: #f0f8ff;
-    -fx-control-inner-background: #ffffff;
-    -fx-text-base-color: #003366;
-    -fx-accent: #0066cc;
+    -fx-background-color: linear-gradient(to bottom right, #dbeafe, #eff6ff 45%, #e0f2fe);
+    -fx-accent: #1d4ed8;
+    -fx-focus-color: #2563eb;
 }
-.menu-bar {
-    -fx-background-color: #cce6ff;
-}
+.menu-bar { -fx-background-color: linear-gradient(to right, #1e3a8a, #2563eb, #0284c7); }
+.panel-header { -fx-background-color: linear-gradient(to right, #1e40af, #2563eb, #38bdf8); }
+.dashboard-hero { -fx-background-color: linear-gradient(to right, #1e3a8a, #2563eb, #0ea5e9); }
+.tab-pane .tab:selected .tab-label { -fx-text-fill: #1d4ed8; }
+.button { -fx-background-color: linear-gradient(to bottom, #3b82f6, #1d4ed8); }
+.button:hover { -fx-background-color: linear-gradient(to bottom, #2563eb, #1e40af); }
+#loginPane { -fx-background-color: linear-gradient(to bottom right, #1e3a8a, #2563eb 55%, #38bdf8); }

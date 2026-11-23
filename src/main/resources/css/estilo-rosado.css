@@ -1,10 +1,13 @@
+/* Tema rosado - overlay sobre style.css */
 .root {
-    -fx-base: #ffe6f2;
-    -fx-background: #fff0f5;
-    -fx-control-inner-background: #ffffff;
-    -fx-text-base-color: #4d0026;
-    -fx-accent: #ff66b2;
+    -fx-background-color: linear-gradient(to bottom right, #fce7f3, #fff1f2 45%, #fdf2f8);
+    -fx-accent: #db2777;
+    -fx-focus-color: #ec4899;
 }
-.menu-bar {
-    -fx-background-color: #ffcciv; /* o #ffcce6 */
-}
+.menu-bar { -fx-background-color: linear-gradient(to right, #831843, #db2777, #f472b6); }
+.panel-header { -fx-background-color: linear-gradient(to right, #be185d, #ec4899, #f9a8d4); }
+.dashboard-hero { -fx-background-color: linear-gradient(to right, #9d174d, #db2777, #fb7185); }
+.tab-pane .tab:selected .tab-label { -fx-text-fill: #be185d; }
+.button { -fx-background-color: linear-gradient(to bottom, #ec4899, #db2777); }
+.button:hover { -fx-background-color: linear-gradient(to bottom, #db2777, #be185d); }
+#loginPane { -fx-background-color: linear-gradient(to bottom right, #831843, #db2777 55%, #fb7185); }

@@ -484,25 +484,26 @@ public class VentaController { // CLASE controladora de ventas (POO + integraci√
             }
 
             String fechaStr = fecha.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            // Arma DTO Comprobante con datos de venta + cliente seleccionado + items del carrito
             ultimoComprobante = new Comprobante(serie, nro, fechaStr,
                     nvl(clienteSeleccionado.getNombre()), nvl(clienteSeleccionado.getDniRuc()),
-                    nvl(clienteSeleccionado.getDireccion()), total, itemsComp);
-            ultimoComprobante.setEstado("ACTIVO");
+                    nvl(clienteSeleccionado.getDireccion()), total, itemsComp); // -> DTO usado por vista/PDF
+            ultimoComprobante.setEstado("ACTIVO"); // marca comprobante como ACTIVO
 
-            carrito.clear();
-            cargarProductos();
-            actualizarTotales();
+            carrito.clear();        // limpia carrito UI/memoria
+            cargarProductos();      // recarga productos (stock actualizado) desde servicio
+            actualizarTotales();    // recalcula totales en pantalla
 
-            clienteSeleccionado = null;
+            clienteSeleccionado = null; // limpia selecci√≥n de cliente en memoria
 
-            if (autocompCliente != null) autocompCliente.setText("");
-            if (dniRuc != null) dniRuc.setText("");
-            if (razonSocial != null) razonSocial.setText("");
-            if (txtDireccion != null) txtDireccion.setText("");
+            if (autocompCliente != null) autocompCliente.setText(""); // limpia campo UI
+            if (dniRuc != null) dniRuc.setText("");                   // limpia campo UI
+            if (razonSocial != null) razonSocial.setText("");         // limpia campo UI
+            if (txtDireccion != null) txtDireccion.setText("");       // limpia campo UI
 
 
-            toast("Venta registrada: " + serie + "-" + nro, false);
-            generarComprobante();
+            toast("Venta registrada: " + serie + "-" + nro, false); // feedback al usuario
+            generarComprobante(); // manda a abrir/cargar MainComprobanteController con ultimoComprobante
         } catch (Exception e) {
             toast("Error al registrar venta: " + e.getMessage(), true);
             e.printStackTrace();
@@ -566,10 +567,10 @@ public class VentaController { // CLASE controladora de ventas (POO + integraci√
                 }
                 return AppContext.getInstance().getBean(cls);
             });
-            var root = loader.load();
-            Object ctrl = loader.getController();
+            var root = loader.load(); // carga main_comprobante.fxml
+            Object ctrl = loader.getController(); // obtiene controlador creado por AppContext/controllerFactory
             if (ctrl instanceof MainComprobanteController mcc) {
-                mcc.pasarDatos(ultimoComprobante);
+                mcc.pasarDatos(ultimoComprobante); // VentaController -> MainComprobanteController: env√≠a DTO Comprobante
             }
             Stage stage = new Stage();
             stage.setTitle("Comprobante de Pago");

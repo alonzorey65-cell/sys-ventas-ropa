@@ -5,6 +5,14 @@
 -- Este archivo muestra la arquitectura equivalente en SQLite para
 -- documentación/portabilidad académica.
 --
+-- Última actualización:
+-- - Se alineó la documentación con los cambios recientes del comprobante:
+--   el comprobante ahora muestra DNI o RUC según el documento del cliente
+--   y también muestra la dirección del cliente.
+-- - No se requirieron nuevas tablas ni columnas en BD porque el esquema
+--   ya incluía cliente.dni_ruc y cliente.direccion.
+-- - Se mantienen índices POS y relaciones clave para venta/comprobante.
+--
 -- Equivalencias usadas:
 --   BIGSERIAL/IDENTITY -> INTEGER PRIMARY KEY AUTOINCREMENT
 --   VARCHAR            -> TEXT
@@ -85,12 +93,14 @@ CREATE TABLE producto (
 );
 
 -- Clientes
+-- dni_ruc: DNI (8) o RUC (11); el comprobante muestra la etiqueta según este valor.
+-- direccion: se muestra en el comprobante (vista previa/PDF) junto con los datos del cliente.
 CREATE TABLE cliente (
     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre TEXT NOT NULL,
-    dni_ruc TEXT,
-    direccion TEXT,
-    telefono TEXT
+    nombre TEXT NOT NULL,  -- Nombre o razón social
+    dni_ruc TEXT,          -- Documento del cliente (DNI/RUC)
+    direccion TEXT,        -- Dirección del cliente (usada en comprobante)
+    telefono TEXT          -- Teléfono de contacto
 );
 
 -- Carrito temporal POS

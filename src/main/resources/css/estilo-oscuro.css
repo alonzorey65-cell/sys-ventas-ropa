@@ -1,14 +1,46 @@
+/* Tema oscuro - overlay sobre style.css */
 .root {
-    -fx-base: #1e1e1e;
-    -fx-background: #121212;
-    -fx-control-inner-background: #2b2b2b;
-    -fx-text-base-color: #ffffff;
-    -fx-accent: #007acc;
+    -fx-base: #0f172a;
+    -fx-background-color: linear-gradient(to bottom right, #0b1220, #111827 45%, #0f172a);
+    -fx-text-fill: #e5e7eb;
+    -fx-accent: #60a5fa;
+    -fx-focus-color: #60a5fa;
+    -fx-faint-focus-color: rgba(96,165,250,0.18);
 }
-.menu-bar, .menu-item {
-    -fx-background-color: #1f1f1f;
-    -fx-text-fill: white;
+.label { -fx-text-fill: #e5e7eb; }
+.muted { -fx-text-fill: #94a3b8; }
+.card, .stat-card, .card-soft, .quick-action {
+    -fx-background-color: #1e293b;
+    -fx-border-color: #334155;
 }
-.tab-pane .tab-header-background {
-    -fx-background-color: #181818;
+.stat-card .stat-title { -fx-text-fill: #94a3b8; }
+.stat-card .stat-value { -fx-text-fill: #f8fafc; }
+.text-field, .password-field, .text-area, .combo-box-base {
+    -fx-background-color: #0f172a;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #64748b;
+    -fx-border-color: #334155;
 }
+.combo-box .list-cell { -fx-text-fill: #f8fafc; -fx-background-color: #0f172a; }
+.combo-box-popup .list-view { -fx-background-color: #1e293b; -fx-border-color: #334155; }
+.table-view { -fx-background-color: #1e293b; -fx-border-color: #334155; }
+.table-view .column-header-background { -fx-background-color: #24324a; }
+.table-view .column-header .label { -fx-text-fill: #e2e8f0; }
+.table-row-cell { -fx-background-color: #1e293b; -fx-border-color: transparent transparent #334155 transparent; }
+.table-row-cell:odd { -fx-background-color: #22304a; }
+.table-row-cell:hover { -fx-background-color: #334155; }
+.table-row-cell:selected { -fx-background-color: #1d4ed8; }
+.table-cell, .table-row-cell:selected .table-cell { -fx-text-fill: #f8fafc; }
+.tab-pane .tab-header-area .tab-header-background { -fx-background-color: #111827; -fx-border-color: transparent transparent #334155 transparent; }
+.tab-pane .tab { -fx-background-color: #1e293b; -fx-border-color: #334155 #334155 transparent #334155; }
+.tab-pane .tab:selected { -fx-background-color: #0f172a; }
+.tab-pane .tab .tab-label { -fx-text-fill: #cbd5e1; }
+.tab-pane .tab:selected .tab-label { -fx-text-fill: #93c5fd; }
+.menu-bar { -fx-background-color: linear-gradient(to right, #020617, #0f172a); }
+.context-menu { -fx-background-color: #1e293b; -fx-border-color: #334155; }
+.menu-item .label { -fx-text-fill: #e2e8f0; }
+.menu-item:focused, .menu-item:hover { -fx-background-color: #334155; }
+.scroll-bar .thumb { -fx-background-color: #475569; }
+.split-pane > .split-pane-divider { -fx-background-color: #334155; }
+#loginPane { -fx-background-color: linear-gradient(to bottom right, #020617, #1e293b 55%, #0f172a); }
+.login-card { -fx-background-color: #1e293b; -fx-border-color: #334155; -fx-border-radius: 20; }

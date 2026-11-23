@@ -1,5 +1,8 @@
 package pe.edu.upeu.controller;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,6 +19,7 @@ import pe.edu.upeu.config.AppContext;
 import pe.edu.upeu.dto.MenuMenuItenTO;
 import pe.edu.upeu.dto.SessionManager;
 import pe.edu.upeu.service.IMenuMenuItemDao;
+import pe.edu.upeu.utils.UiAnimations;
 import pe.edu.upeu.utils.UtilsX;
 
 import java.io.IOException;
@@ -69,6 +73,7 @@ public class MainGuiController {
         this.mmiDao = mmiDao;
     }
 
+    // Inicializa la GUI principal: configura listeners, idioma, estilo y construye menús según perfil
     @FXML
     public void initialize(){
         PauseTransition pause = new PauseTransition(Duration.millis(300));
@@ -94,14 +99,17 @@ public class MainGuiController {
         customItemIdioma.setHideOnClick(false);
 
         graficarMenus();
+        cargarDashboardInicial();
         if (bp != null) bp.setCenter(tabPane);
     }
 
+    // Obtiene accesos de menú desde BD/DAO según perfil de sesión (SessionManager -> IMenuMenuItemDao)
     private List<MenuMenuItenTO> listaAccesos() {
         myresources = util.detectLanguage(userPrefs.get("IDIOMAX", "es"));
         return mmiDao.listaAccesos(SessionManager.getInstance().getUserPerfil(), myresources);
     }
 
+    // Cambia hoja de estilos CSS de la escena (UI)
     private void cambiarEstilo() {
         String estiloSeleccionado = comboBoxEstilo.getSelectionModel().getSelectedItem();
         if (estiloSeleccionado == null || bp == null || bp.getScene() == null) return;
@@ -112,14 +120,19 @@ public class MainGuiController {
             case "Estilo Azul" -> "/css/estilo-azul.css";
             case "Estilo Verde" -> "/css/estilo-verde.css";
             case "Estilo Rosado" -> "/css/estilo-rosado.css";
-            default -> "/css/style.css"; // por defecto, tema claro corregido
+            default -> "/css/style.css";
         };
 
         escena.getStylesheets().clear();
-        URL cssUrl = getClass().getResource(cssPath);
-        if (cssUrl != null) escena.getStylesheets().add(cssUrl.toExternalForm());
+        URL baseUrl = getClass().getResource("/css/style.css");
+        if (baseUrl != null) escena.getStylesheets().add(baseUrl.toExternalForm());
+        if (!"/css/style.css".equals(cssPath)) {
+            URL cssUrl = getClass().getResource(cssPath);
+            if (cssUrl != null) escena.getStylesheets().add(cssUrl.toExternalForm());
+        }
     }
 
+    // Cambia idioma guardado en preferencias y reconstruye menús
     private void cambiarIdioma() {
         String idiomaSeleccionado = comboBoxIdioma.getSelectionModel().getSelectedItem();
         if (idiomaSeleccionado == null) return;
@@ -138,6 +151,7 @@ public class MainGuiController {
         return (v == null || v.isBlank()) ? def : v;
     }
 
+    // Construye MenuBar dinámico según accesos del perfil y agrega menús de estilo/idioma
     private void graficarMenus() {
         lista = listaAccesos();
         if (menuBar == null) return;
@@ -149,6 +163,8 @@ public class MainGuiController {
         miPanelAdmin.setOnAction(e -> abrirTabPaneFXML("/view/main_admin.fxml", "Panel Administrador"));
         MenuItem miPanel = new MenuItem("Panel Vendedor");
         miPanel.setOnAction(e -> abrirTabPaneFXML("/view/main_vendedor.fxml", "Panel Vendedor"));
+        MenuItem miPanelAlmacen = new MenuItem("Panel Almacén");
+        miPanelAlmacen.setOnAction(e -> abrirTabPaneFXML("/view/main_almacen.fxml", "Panel Almacén"));
         MenuItem miProd = new MenuItem(tr("menu.inventario", "Productos"));
         miProd.setOnAction(e -> abrirTabPaneFXML("/view/main_producto.fxml", tr("menu.inventario", "Productos")));
         MenuItem miVenta = new MenuItem(tr("menu.ventas", "Ventas"));
@@ -163,6 +179,7 @@ public class MainGuiController {
         });
         if (tieneAcceso("/view/main_admin.fxml")) fileMenu.getItems().add(miPanelAdmin);
         if (tieneAcceso("/view/main_vendedor.fxml")) fileMenu.getItems().add(miPanel);
+        if (tieneAcceso("/view/main_almacen.fxml")) fileMenu.getItems().add(miPanelAlmacen);
         if (tieneAcceso("/view/main_producto.fxml")) fileMenu.getItems().add(miProd);
         if (tieneAcceso("/view/main_venta.fxml")) fileMenu.getItems().add(miVenta);
         if (tieneAcceso("/view/main_comprobante.fxml")) fileMenu.getItems().add(miComp);
@@ -192,6 +209,59 @@ public class MainGuiController {
             }
         }
 
+        // Menú Acceso rápido
+        Menu quickMenu = new Menu("Acceso Rápido");
+        MenuItem miHome = new MenuItem("Dashboard");
+        miHome.setOnAction(e -> {
+            if (tabPane != null && !tabPane.getTabs().isEmpty()) {
+                tabPane.getSelectionModel().select(0);
+            }
+        });
+        quickMenu.getItems().add(miHome);
+        quickMenu.getItems().add(new SeparatorMenuItem());
+
+        MenuItem qVenta = new MenuItem("Ventas / POS");
+        qVenta.setOnAction(e -> abrirTabPaneFXML("/view/main_venta.fxml", "Ventas / POS"));
+        MenuItem qProductos = new MenuItem("Productos");
+        qProductos.setOnAction(e -> abrirTabPaneFXML("/view/main_producto.fxml", "Productos"));
+        MenuItem qClientes = new MenuItem("Clientes");
+        qClientes.setOnAction(e -> abrirTabPaneFXML("/view/main_cliente.fxml", "Clientes"));
+        MenuItem qComprobantes = new MenuItem("Comprobantes");
+        qComprobantes.setOnAction(e -> abrirTabPaneFXML("/view/main_comprobante.fxml", "Comprobantes"));
+        MenuItem qUsuarios = new MenuItem("Usuarios");
+        qUsuarios.setOnAction(e -> abrirTabPaneFXML("/view/main_usuario.fxml", "Usuarios"));
+        MenuItem qCategorias = new MenuItem("Categorías");
+        qCategorias.setOnAction(e -> abrirTabPaneFXML("/view/main_categoria.fxml", "Categorías"));
+        MenuItem qMarcas = new MenuItem("Marcas");
+        qMarcas.setOnAction(e -> abrirTabPaneFXML("/view/main_marca.fxml", "Marcas"));
+        MenuItem qUnidades = new MenuItem("Unidad de Medida");
+        qUnidades.setOnAction(e -> abrirTabPaneFXML("/view/main_unidadmedida.fxml", "Unidad de Medida"));
+
+        if (tieneAcceso("/view/main_venta.fxml")) quickMenu.getItems().add(qVenta);
+        if (tieneAcceso("/view/main_producto.fxml")) quickMenu.getItems().add(qProductos);
+        if (tieneAcceso("/view/main_cliente.fxml")) quickMenu.getItems().add(qClientes);
+        if (tieneAcceso("/view/main_comprobante.fxml")) quickMenu.getItems().add(qComprobantes);
+        if (tieneAcceso("/view/main_usuario.fxml")) quickMenu.getItems().add(qUsuarios);
+        if (tieneAcceso("/view/main_categoria.fxml")) quickMenu.getItems().add(qCategorias);
+        if (tieneAcceso("/view/main_marca.fxml")) quickMenu.getItems().add(qMarcas);
+        if (tieneAcceso("/view/main_unidadmedida.fxml")) quickMenu.getItems().add(qUnidades);
+        quickMenu.getItems().add(new SeparatorMenuItem());
+        MenuItem qCerrarActual = new MenuItem("Cerrar pestaña actual");
+        qCerrarActual.setOnAction(e -> {
+            if (tabPane != null && !tabPane.getTabs().isEmpty()) {
+                Tab sel = tabPane.getSelectionModel().getSelectedItem();
+                if (sel != null && sel.isClosable()) tabPane.getTabs().remove(sel);
+            }
+        });
+        MenuItem qCerrarOtras = new MenuItem("Cerrar otras pestañas");
+        qCerrarOtras.setOnAction(e -> {
+            if (tabPane == null) return;
+            Tab sel = tabPane.getSelectionModel().getSelectedItem();
+            tabPane.getTabs().removeIf(t -> t != sel && t.isClosable());
+        });
+        quickMenu.getItems().addAll(qCerrarActual, qCerrarOtras);
+        menuBar.getMenus().add(quickMenu);
+
         // Menú Estilo e Idioma
         menuEstilo.setText(tr("menu.estilo", "Cambiar Estilo"));
         menuEstilo.getItems().setAll(customItem);
@@ -207,16 +277,18 @@ public class MainGuiController {
         }
         if (tabPane != null && !tabPane.getTabs().isEmpty()) {
             Tab t0 = tabPane.getTabs().get(0);
-            if (t0 != null) t0.setText(tr("label.bienvenido", "Pantalla Principal"));
+            if (t0 != null) t0.setText("Dashboard");
         }
-        // Abrir panel vendedor por defecto para perfil vendedor
+        // Abrir panel por defecto según perfil
         String perfil = SessionManager.getInstance().getUserPerfil();
         String p = perfil == null ? "" : perfil.trim().toUpperCase();
         boolean esVendedor = p.equals("2") || p.equals("VENDEDOR");
         boolean esAdmin = p.equals("1") || p.equals("ADMIN") || p.equals("ADMINISTRADOR");
+        boolean esAlmacen = p.equals("3") || p.equals("ALMACEN") || p.equals("ALMACENERO");
         if (tabPane != null && tabPane.getTabs().size() <= 1) {
             if (esVendedor) abrirTabPaneFXML("/view/main_vendedor.fxml", "Panel Vendedor");
             else if (esAdmin) abrirTabPaneFXML("/view/main_admin.fxml", "Panel Administrador");
+            else if (esAlmacen) abrirTabPaneFXML("/view/main_almacen.fxml", "Panel Almacén");
         }
     }
 
@@ -234,7 +306,44 @@ public class MainGuiController {
         return o;
     }
 
+    private void cargarDashboardInicial() {
+        try {
+            if (tabPane == null || tabPane.getTabs().isEmpty()) return;
+            Tab t0 = tabPane.getTabs().get(0);
+            if (t0 == null || t0.getContent() != null) return;
+            URL url = getClass().getResource("/view/main_dashboard.fxml");
+            if (url == null) return;
+            FXMLLoader loader = new FXMLLoader(url);
+            loader.setControllerFactory(AppContext.getInstance()::getBean);
+            Parent root = loader.load();
+            ScrollPane sp = new ScrollPane(root);
+            sp.setFitToWidth(true);
+            sp.setFitToHeight(true);
+            animarEntrada(root);
+            t0.setContent(sp);
+            t0.setText("Dashboard");
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar dashboard inicial: " + e.getMessage());
+        }
+    }
+
+    private void animarEntrada(Parent node) {
+        if (node == null) return;
+        node.setOpacity(0);
+        node.setTranslateY(18);
+        FadeTransition fade = new FadeTransition(Duration.millis(320), node);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        TranslateTransition slide = new TranslateTransition(Duration.millis(320), node);
+        slide.setFromY(18);
+        slide.setToY(0);
+        ParallelTransition pt = new ParallelTransition(fade, slide);
+        pt.setOnFinished(e -> UiAnimations.decorateTree(node));
+        pt.play();
+    }
+
     // Método seguro para abrir cada vista en su pestaña respectiva sin duplicados
+    // Carga un FXML en un Tab nuevo (o selecciona existente); usa AppContext como controllerFactory para inyectar dependencias
     private void abrirTabPaneFXML(String fxmlPath, String tittle) {
         try {
             if (!tieneAcceso(fxmlPath)) {
@@ -263,6 +372,7 @@ public class MainGuiController {
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             fxmlLoader.setControllerFactory(context::getBean);
             Parent root = fxmlLoader.load();
+            animarEntrada(root);
 
             ScrollPane scrollPane = new ScrollPane(root);
             scrollPane.setFitToWidth(true);
@@ -282,11 +392,20 @@ public class MainGuiController {
         String p = perfil == null ? "1" : perfil.trim().toUpperCase();
         boolean esAdmin = p.equals("1") || p.equals("ADMIN") || p.equals("ADMINISTRADOR");
         boolean esVendedor = p.equals("2") || p.equals("VENDEDOR");
+        boolean esAlmacen = p.equals("3") || p.equals("ALMACEN") || p.equals("ALMACENERO");
         if (esAdmin) return true;
         if (esVendedor) {
             return fxmlPath.contains("main_vendedor.fxml")
                     || fxmlPath.contains("main_venta.fxml")
                     || fxmlPath.contains("main_comprobante.fxml")
+                    || fxmlPath.contains("login.fxml");
+        }
+        if (esAlmacen) {
+            return fxmlPath.contains("main_almacen.fxml")
+                    || fxmlPath.contains("main_producto.fxml")
+                    || fxmlPath.contains("main_categoria.fxml")
+                    || fxmlPath.contains("main_marca.fxml")
+                    || fxmlPath.contains("main_unidadmedida.fxml")
                     || fxmlPath.contains("login.fxml");
         }
         // Por defecto, solo vistas no administrativas básicas

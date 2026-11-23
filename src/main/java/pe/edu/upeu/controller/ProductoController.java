@@ -98,6 +98,7 @@ public class ProductoController {
         aplicarValidacionesCampos();
     }
 
+    // Carga combos de categoría/marca/unidad desde servicios (BD) para el formulario producto
     private void cargarCombos() {
         try {
             if (cbxCategoria != null) {
@@ -153,6 +154,7 @@ public class ProductoController {
         tableView.setItems(filtered);
     }
 
+    // Valida formulario y guarda/actualiza producto: UI -> ProductoController -> IProductoService -> ProductoRepository -> BD
     @FXML
     public void validarFormulario(ActionEvent event) {
         try {
@@ -248,6 +250,7 @@ public class ProductoController {
         }
     }
 
+    // Elimina producto seleccionado tras confirmación: UI -> IProductoService.eliminar -> BD
     @FXML
     public void eliminarProducto(ActionEvent event) {
         if (idProductoSeleccionado == null) {
@@ -275,6 +278,7 @@ public class ProductoController {
         }
     }
 
+    // Lista productos desde servicio y refresca tabla (aplica filtro si existe)
     @FXML
     public void listarProductos() {
         try {
@@ -291,6 +295,7 @@ public class ProductoController {
         }
     }
 
+    // Doble clic en tabla: carga datos del producto al formulario para edición
     private void cargarDatosEnFormulario(Producto producto) {
         idProductoSeleccionado = producto.getIdProducto();
         if (txtNombreProducto != null) txtNombreProducto.setText(nvl(producto.getNombre(), ""));
@@ -302,6 +307,7 @@ public class ProductoController {
         setMsg("Editando producto ID " + producto.getIdProducto() + ". Modifique y presione Guardar.", false);
     }
 
+    // Limpia formulario y vuelve a modo "nuevo producto"
     @FXML
     public void limpiarCampos() {
         idProductoSeleccionado = null;

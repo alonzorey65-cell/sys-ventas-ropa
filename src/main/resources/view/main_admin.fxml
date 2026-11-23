@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pe.edu.upeu.controller.AdminController">
+    <children>
+        <VBox spacing="16" AnchorPane.topAnchor="14" AnchorPane.leftAnchor="14" AnchorPane.rightAnchor="14" AnchorPane.bottomAnchor="14">
+            <children>
+                <HBox spacing="14" alignment="CENTER_LEFT" styleClass="panel-header">
+                    <children>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label fx:id="lblBienvenida" text="Panel Administrador" style="-fx-text-fill:white; -fx-font-size:26px; -fx-font-weight:bold;"/>
+                                <Label text="Visión general del negocio, indicadores clave y accesos rápidos." styleClass="muted"/>
+                            </children>
+                        </VBox>
+                        <Button text="Refrescar" onAction="#refrescar" styleClass="btn-ghost"/>
+                        <Button text="Productos" onAction="#abrirProductos" styleClass="btn-ghost"/>
+                        <Button text="Clientes" onAction="#abrirClientes" styleClass="btn-ghost"/>
+                        <Button text="Ventas" onAction="#abrirVentas" styleClass="btn-ghost"/>
+                        <Button text="Usuarios" onAction="#abrirUsuarios" styleClass="btn-ghost"/>
+                    </children>
+                </HBox>
+
+                <GridPane hgap="12" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="14.28" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="14.28" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="14.28" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="14.28" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="14.28" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="14.28" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="14.28" hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="4" styleClass="stat-card, stat-blue" GridPane.columnIndex="0">
+                            <children><Label text="VENTAS HOY" styleClass="stat-title"/><Label fx:id="lblVentasHoy" text="0" styleClass="stat-value" style="-fx-text-fill:#2563eb;"/></children>
+                        </VBox>
+                        <VBox spacing="4" styleClass="stat-card, stat-green" GridPane.columnIndex="1">
+                            <children><Label text="TOTAL HOY" styleClass="stat-title"/><Label fx:id="lblTotalHoy" text="S/ 0.00" styleClass="stat-value" style="-fx-text-fill:#059669; -fx-font-size:22px;"/></children>
+                        </VBox>
+                        <VBox spacing="4" styleClass="stat-card, stat-purple" GridPane.columnIndex="2">
+                            <children><Label text="PRODUCTOS" styleClass="stat-title"/><Label fx:id="lblProductos" text="0" styleClass="stat-value" style="-fx-text-fill:#7c3aed;"/></children>
+                        </VBox>
+                        <VBox spacing="4" styleClass="stat-card, stat-teal" GridPane.columnIndex="3">
+                            <children><Label text="CLIENTES" styleClass="stat-title"/><Label fx:id="lblClientes" text="0" styleClass="stat-value" style="-fx-text-fill:#0f766e;"/></children>
+                        </VBox>
+                        <VBox spacing="4" styleClass="stat-card, stat-orange" GridPane.columnIndex="4">
+                            <children><Label text="USUARIOS" styleClass="stat-title"/><Label fx:id="lblUsuarios" text="0" styleClass="stat-value" style="-fx-text-fill:#ea580c;"/></children>
+                        </VBox>
+                        <VBox spacing="4" styleClass="stat-card, stat-red" GridPane.columnIndex="5">
+                            <children><Label text="STOCK BAJO" styleClass="stat-title"/><Label fx:id="lblStockBajo" text="0" styleClass="stat-value" style="-fx-text-fill:#dc2626;"/></children>
+                        </VBox>
+                        <VBox spacing="4" styleClass="stat-card, stat-orange" GridPane.columnIndex="6">
+                            <children><Label text="ANULADAS HOY" styleClass="stat-title"/><Label fx:id="lblAnuladasHoy" text="0" styleClass="stat-value" style="-fx-text-fill:#d97706;"/></children>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <HBox spacing="16" VBox.vgrow="ALWAYS">
+                    <children>
+                        <VBox spacing="12" prefWidth="280" minWidth="240" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <Label text="Acciones rápidas" styleClass="section-title">
+                                    <font><Font name="System Bold" size="16"/></font>
+                                </Label>
+                                <Button text="Nueva Venta / POS" onAction="#abrirVentas" maxWidth="Infinity" styleClass="btn-success"/>
+                                <Button text="Productos" onAction="#abrirProductos" maxWidth="Infinity"/>
+                                <Button text="Clientes" onAction="#abrirClientes" maxWidth="Infinity" styleClass="btn-secondary"/>
+                                <Button text="Comprobantes" onAction="#abrirComprobantes" maxWidth="Infinity" styleClass="btn-warning"/>
+                                <Button text="Usuarios" onAction="#abrirUsuarios" maxWidth="Infinity" styleClass="btn-secondary"/>
+                                <Separator/>
+                                <Label text="Nota" style="-fx-font-weight:bold; -fx-text-fill:#1d4ed8;"/>
+                                <Label text="Monitorea stock bajo y ventas anuladas para mantener el control operativo."
+                                       wrapText="true" styleClass="muted"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Últimas ventas" styleClass="section-title">
+                                                    <font><Font name="System Bold" size="16"/></font>
+                                                </Label>
+                                                <Label text="Actividad reciente del sistema." styleClass="muted"/>
+                                            </children>
+                                        </VBox>
+                                        <Label text="RESUMEN" styleClass="badge"/>
+                                    </children>
+                                </HBox>
+                                <TableView fx:id="tableVentas" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="70"/>
+                                        <TableColumn fx:id="colFecha" text="Fecha" prefWidth="150"/>
+                                        <TableColumn fx:id="colSerie" text="Serie" prefWidth="80"/>
+                                        <TableColumn fx:id="colNumero" text="Número" prefWidth="100"/>
+                                        <TableColumn fx:id="colTotal" text="Total" prefWidth="100"/>
+                                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
+                                    </columns>
+                                    <placeholder><Label text="No hay ventas registradas." styleClass="muted"/></placeholder>
+                                </TableView>
+                                <Label fx:id="lblMsg" text="Listo." style="-fx-text-fill:#166534; -fx-font-weight:bold;"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

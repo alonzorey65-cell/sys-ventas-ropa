@@ -1,10 +1,13 @@
+/* Tema verde - overlay sobre style.css */
 .root {
-    -fx-base: #e6ffe6;
-    -fx-background: #f0fff0;
-    -fx-control-inner-background: #ffffff;
-    -fx-text-base-color: #003300;
-    -fx-accent: #2e8b57;
+    -fx-background-color: linear-gradient(to bottom right, #dcfce7, #f0fdf4 45%, #ecfeff);
+    -fx-accent: #059669;
+    -fx-focus-color: #10b981;
 }
-.menu-bar {
-    -fx-background-color: #ccffcc;
-}
+.menu-bar { -fx-background-color: linear-gradient(to right, #064e3b, #059669, #14b8a6); }
+.panel-header { -fx-background-color: linear-gradient(to right, #047857, #10b981, #34d399); }
+.dashboard-hero { -fx-background-color: linear-gradient(to right, #065f46, #059669, #2dd4bf); }
+.tab-pane .tab:selected .tab-label { -fx-text-fill: #047857; }
+.button { -fx-background-color: linear-gradient(to bottom, #10b981, #059669); }
+.button:hover { -fx-background-color: linear-gradient(to bottom, #059669, #047857); }
+#loginPane { -fx-background-color: linear-gradient(to bottom right, #064e3b, #059669 55%, #2dd4bf); }

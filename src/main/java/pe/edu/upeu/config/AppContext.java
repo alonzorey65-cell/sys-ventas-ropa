@@ -88,6 +88,11 @@ public class AppContext { // SINGLETON + contenedor IoC de la aplicación
         registrar(ClienteController.class,     new ClienteController(getBean(IClienteService.class)));
         registrar(UsuarioController.class,     new UsuarioController(getBean(IUsuarioService.class)));
         registrar(VendedorController.class,    new VendedorController(getBean(IVentaService.class)));
+        registrar(DashboardController.class,   new DashboardController(
+                getBean(IVentaService.class),
+                getBean(IProductoService.class),
+                getBean(IClienteService.class),
+                getBean(IUsuarioService.class)));
         registrar(VentaController.class,   new VentaController(
                 getBean(IProductoService.class),
                 getBean(IClienteService.class),

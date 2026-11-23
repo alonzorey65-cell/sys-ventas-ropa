@@ -1,54 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.controller.MainComprobanteController">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pe.edu.upeu.controller.MainComprobanteController">
     <children>
-        <VBox spacing="8.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
+        <VBox spacing="14" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
             <children>
-                <Label text="Gestión de Ventas / Comprobantes">
-                    <font><Font name="System Bold" size="18.0" /></font>
-                </Label>
-
-                <HBox spacing="8.0">
+                <HBox spacing="14" alignment="CENTER_LEFT" styleClass="panel-header-purple">
                     <children>
-                        <Button fx:id="btnRefrescar" mnemonicParsing="false" onAction="#listarVentas" text="Refrescar" />
-                        <Button fx:id="btnVer" mnemonicParsing="false" onAction="#verComprobanteSeleccionado" text="Ver comprobante" />
-                        <Button fx:id="btnAnularVenta" mnemonicParsing="false" onAction="#anularVentaSeleccionada" text="Anular venta" />
-                        <Button fx:id="btnEliminarVenta" mnemonicParsing="false" onAction="#eliminarVentaSeleccionada" text="Eliminar venta" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnExportarPdf" mnemonicParsing="false" onAction="#onExportarPdf" prefHeight="32.0" prefWidth="130.0" text="Exportar PDF" />
-                        <Button fx:id="btnImprimir" mnemonicParsing="false" onAction="#onImprimir" prefHeight="32.0" prefWidth="110.0" text="Imprimir" />
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Gestión de Ventas / Comprobantes" style="-fx-text-fill:white; -fx-font-size:26px; -fx-font-weight:bold;"/>
+                                <Label text="Consulta ventas, revisa comprobantes, anula, exporta PDF o imprime." styleClass="muted"/>
+                            </children>
+                        </VBox>
+                        <Label text="COMPROBANTES" style="-fx-background-color:rgba(255,255,255,0.2); -fx-text-fill:white; -fx-background-radius:20; -fx-padding:4 10; -fx-font-weight:bold;"/>
                     </children>
                 </HBox>
 
-                <SplitPane dividerPositions="0.45" VBox.vgrow="ALWAYS">
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card" style="-fx-padding:12;">
+                    <children>
+                        <Button fx:id="btnRefrescar" mnemonicParsing="false" onAction="#listarVentas" text="Refrescar" styleClass="btn-secondary"/>
+                        <Button fx:id="btnVer" mnemonicParsing="false" onAction="#verComprobanteSeleccionado" text="Ver comprobante"/>
+                        <Button fx:id="btnAnularVenta" mnemonicParsing="false" onAction="#anularVentaSeleccionada" text="Anular venta" styleClass="btn-warning"/>
+                        <Button fx:id="btnEliminarVenta" mnemonicParsing="false" onAction="#eliminarVentaSeleccionada" text="Eliminar venta" styleClass="btn-danger"/>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnExportarPdf" mnemonicParsing="false" onAction="#onExportarPdf" prefHeight="36.0" prefWidth="140.0" text="Exportar PDF" styleClass="btn-success"/>
+                        <Button fx:id="btnImprimir" mnemonicParsing="false" onAction="#onImprimir" prefHeight="36.0" prefWidth="120.0" text="Imprimir" styleClass="btn-secondary"/>
+                    </children>
+                </HBox>
+
+                <SplitPane dividerPositions="0.48" VBox.vgrow="ALWAYS" style="-fx-background-color:transparent;">
                     <items>
-                        <VBox spacing="6.0">
+                        <VBox spacing="10" styleClass="card" style="-fx-padding:16;">
                             <children>
-                                <Label text="Ventas registradas (CRUD: listar / ver / eliminar)" />
+                                <Label text="Ventas registradas" styleClass="section-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Selecciona una venta para ver su comprobante." styleClass="muted"/>
                                 <TableView fx:id="tableVentas" VBox.vgrow="ALWAYS">
                                     <columns>
                                         <TableColumn fx:id="colId" prefWidth="60.0" text="ID" />
                                         <TableColumn fx:id="colFecha" prefWidth="140.0" text="Fecha" />
                                         <TableColumn fx:id="colSerie" prefWidth="70.0" text="Serie" />
                                         <TableColumn fx:id="colNumero" prefWidth="100.0" text="Número" />
-                                        <TableColumn fx:id="colCliente" prefWidth="160.0" text="Cliente" />
+                                        <TableColumn fx:id="colCliente" prefWidth="170.0" text="Cliente" />
                                         <TableColumn fx:id="colTotal" prefWidth="90.0" text="Total" />
                                         <TableColumn fx:id="colEstado" prefWidth="90.0" text="Estado" />
                                     </columns>
+                                    <placeholder><Label text="No hay ventas registradas." styleClass="muted"/></placeholder>
                                 </TableView>
                             </children>
                         </VBox>
-                        <VBox spacing="6.0">
+                        <VBox spacing="10" styleClass="card" style="-fx-padding:16;">
                             <children>
-                                <Label text="Vista previa del comprobante" />
-                                <ScrollPane fx:id="scrollVisor" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                                <Label text="Vista previa del comprobante" styleClass="section-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Aquí se muestra el detalle del comprobante seleccionado." styleClass="muted"/>
+                                <ScrollPane fx:id="scrollVisor" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color:#f1f5f9; -fx-background:#f1f5f9; -fx-background-radius:10;">
                                     <content>
-                                        <AnchorPane style="-fx-background-color: #e0e0e0;" />
+                                        <AnchorPane style="-fx-background-color: #e2e8f0;" />
                                     </content>
                                 </ScrollPane>
                             </children>

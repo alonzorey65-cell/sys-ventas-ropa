@@ -3,25 +3,80 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.controller.UsuarioController">
-  <children>
-    <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
-      <Label text="Gestión de Usuarios"><font><Font name="System Bold" size="20"/></font></Label>
-      <HBox spacing="10">
-        <VBox spacing="8" prefWidth="320">
-          <Label text="Usuario"/><TextField fx:id="txtUsuario" promptText="Nombre de usuario"/>
-          <Label text="Clave"/><PasswordField fx:id="txtClave" promptText="Clave"/>
-          <Label text="Perfil"/><ComboBox fx:id="cbxPerfil" prefWidth="320"/>
-          <HBox spacing="8"><Button text="Guardar" onAction="#guardar"/><Button text="Limpiar" onAction="#limpiar"/><Button text="Eliminar" onAction="#eliminar"/></HBox>
-          <Label fx:id="lblMsg" text="Listo."/>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pe.edu.upeu.controller.UsuarioController">
+    <children>
+        <VBox spacing="16" AnchorPane.topAnchor="14" AnchorPane.leftAnchor="14" AnchorPane.rightAnchor="14" AnchorPane.bottomAnchor="14">
+            <children>
+                <HBox spacing="14" alignment="CENTER_LEFT" styleClass="panel-header-orange">
+                    <children>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Gestión de Usuarios" style="-fx-text-fill:white; -fx-font-size:26px; -fx-font-weight:bold;"/>
+                                <Label text="Administra cuentas, claves y perfiles de acceso al sistema." styleClass="muted"/>
+                            </children>
+                        </VBox>
+                        <Label text="SEGURIDAD" style="-fx-background-color:rgba(255,255,255,0.2); -fx-text-fill:white; -fx-background-radius:20; -fx-padding:4 10; -fx-font-weight:bold;"/>
+                    </children>
+                </HBox>
+
+                <HBox spacing="16" VBox.vgrow="ALWAYS">
+                    <children>
+                        <VBox spacing="10" prefWidth="360" minWidth="320" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <Label text="Datos del usuario" styleClass="section-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Usuario" style="-fx-font-weight:bold;"/>
+                                <TextField fx:id="txtUsuario" promptText="Nombre de usuario"/>
+                                <Label text="Clave" style="-fx-font-weight:bold;"/>
+                                <PasswordField fx:id="txtClave" promptText="Clave"/>
+                                <Label text="Confirmar Clave" style="-fx-font-weight:bold;"/>
+                                <PasswordField fx:id="txtConfirmar" promptText="Confirmar clave"/>
+                                <Label text="Perfil" style="-fx-font-weight:bold;"/>
+                                <ComboBox fx:id="cbxPerfil" prefWidth="320" maxWidth="Infinity"/>
+                                <HBox spacing="8">
+                                    <children>
+                                        <Button text="Guardar" onAction="#guardar" styleClass="btn-success" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                        <Button text="Limpiar" onAction="#limpiar" styleClass="btn-secondary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                        <Button text="Eliminar" onAction="#eliminar" styleClass="btn-danger" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                    </children>
+                                </HBox>
+                                <Separator/>
+                                <Label fx:id="lblMsg" text="Listo." wrapText="true" style="-fx-text-fill:#166534; -fx-font-weight:bold;"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <children>
+                                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Listado de usuarios" styleClass="section-title">
+                                                    <font><Font name="System Bold" size="15"/></font>
+                                                </Label>
+                                                <Label text="Busca usuarios por nombre." styleClass="muted"/>
+                                            </children>
+                                        </VBox>
+                                        <TextField fx:id="txtFiltro" promptText="Buscar usuario..." prefWidth="220"/>
+                                        <Button text="Refrescar" onAction="#listar" styleClass="btn-secondary"/>
+                                    </children>
+                                </HBox>
+                                <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="80"/>
+                                        <TableColumn fx:id="colUsuario" text="Usuario" prefWidth="260"/>
+                                        <TableColumn fx:id="colPerfil" text="Perfil ID" prefWidth="120"/>
+                                    </columns>
+                                    <placeholder><Label text="No hay usuarios registrados." styleClass="muted"/></placeholder>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
         </VBox>
-        <VBox spacing="8" HBox.hgrow="ALWAYS">
-          <HBox spacing="8"><Label text="Filtrar:"/><TextField fx:id="txtFiltro" promptText="Buscar usuario..."/><Button text="Refrescar" onAction="#listar"/></HBox>
-          <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
-            <columns><TableColumn fx:id="colId" text="ID" prefWidth="70"/><TableColumn fx:id="colUsuario" text="Usuario" prefWidth="220"/><TableColumn fx:id="colPerfil" text="Perfil ID" prefWidth="100"/></columns>
-          </TableView>
-        </VBox>
-      </HBox>
-    </VBox>
-  </children>
+    </children>
 </AnchorPane>

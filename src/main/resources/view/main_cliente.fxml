@@ -3,28 +3,82 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.controller.ClienteController">
-  <children>
-    <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
-      <Label text="Gestión de Clientes"><font><Font name="System Bold" size="20"/></font></Label>
-      <HBox spacing="10">
-        <VBox spacing="8" prefWidth="340">
-          <Label text="DNI/RUC"/><TextField fx:id="txtDniRuc" promptText="8 u 11 dígitos"/>
-          <Label text="Nombre / Razón Social"/><TextField fx:id="txtNombre" promptText="Nombre"/>
-          <Label text="Dirección"/><TextField fx:id="txtDireccion" promptText="Dirección"/>
-          <Label text="Teléfono"/><TextField fx:id="txtTelefono" promptText="Teléfono"/>
-          <HBox spacing="8"><Button text="Guardar" onAction="#guardar"/><Button text="Limpiar" onAction="#limpiar"/><Button text="Eliminar" onAction="#eliminar"/></HBox>
-          <Label fx:id="lblMsg" text="Listo."/>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pe.edu.upeu.controller.ClienteController">
+    <children>
+        <VBox spacing="16" AnchorPane.topAnchor="14" AnchorPane.leftAnchor="14" AnchorPane.rightAnchor="14" AnchorPane.bottomAnchor="14">
+            <children>
+                <HBox spacing="14" alignment="CENTER_LEFT" styleClass="panel-header">
+                    <children>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Gestión de Clientes" style="-fx-text-fill:white; -fx-font-size:26px; -fx-font-weight:bold;"/>
+                                <Label text="Registra y administra la información de tus clientes para ventas y comprobantes." styleClass="muted"/>
+                            </children>
+                        </VBox>
+                        <Label text="CLIENTES" style="-fx-background-color:rgba(255,255,255,0.2); -fx-text-fill:white; -fx-background-radius:20; -fx-padding:4 10; -fx-font-weight:bold;"/>
+                    </children>
+                </HBox>
+
+                <HBox spacing="16" VBox.vgrow="ALWAYS">
+                    <children>
+                        <VBox spacing="10" prefWidth="360" minWidth="320" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <Label text="Datos del cliente" styleClass="section-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="DNI / RUC" style="-fx-font-weight:bold;"/>
+                                <TextField fx:id="txtDniRuc" promptText="8 u 11 dígitos"/>
+                                <Label text="Nombre / Razón Social" style="-fx-font-weight:bold;"/>
+                                <TextField fx:id="txtNombre" promptText="Nombre del cliente"/>
+                                <Label text="Dirección" style="-fx-font-weight:bold;"/>
+                                <TextField fx:id="txtDireccion" promptText="Dirección"/>
+                                <Label text="Teléfono" style="-fx-font-weight:bold;"/>
+                                <TextField fx:id="txtTelefono" promptText="Teléfono"/>
+                                <HBox spacing="8">
+                                    <children>
+                                        <Button text="Guardar" onAction="#guardar" styleClass="btn-success" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                        <Button text="Limpiar" onAction="#limpiar" styleClass="btn-secondary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                        <Button text="Eliminar" onAction="#eliminar" styleClass="btn-danger" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                    </children>
+                                </HBox>
+                                <Separator/>
+                                <Label fx:id="lblMsg" text="Listo." wrapText="true" style="-fx-text-fill:#166534; -fx-font-weight:bold;"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <children>
+                                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Listado de clientes" styleClass="section-title">
+                                                    <font><Font name="System Bold" size="15"/></font>
+                                                </Label>
+                                                <Label text="Busca por nombre o documento." styleClass="muted"/>
+                                            </children>
+                                        </VBox>
+                                        <TextField fx:id="txtFiltro" promptText="Nombre o DNI/RUC..." prefWidth="240"/>
+                                        <Button text="Refrescar" onAction="#listar" styleClass="btn-secondary"/>
+                                    </children>
+                                </HBox>
+                                <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                                        <TableColumn fx:id="colDniRuc" text="DNI/RUC" prefWidth="120"/>
+                                        <TableColumn fx:id="colNombre" text="Nombre" prefWidth="220"/>
+                                        <TableColumn fx:id="colDireccion" text="Dirección" prefWidth="220"/>
+                                        <TableColumn fx:id="colTelefono" text="Teléfono" prefWidth="120"/>
+                                    </columns>
+                                    <placeholder><Label text="No hay clientes registrados." styleClass="muted"/></placeholder>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
         </VBox>
-        <VBox spacing="8" HBox.hgrow="ALWAYS">
-          <HBox spacing="8"><Label text="Filtrar:"/><TextField fx:id="txtFiltro" promptText="Nombre o DNI/RUC..."/><Button text="Refrescar" onAction="#listar"/></HBox>
-          <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
-            <columns>
-              <TableColumn fx:id="colId" text="ID" prefWidth="60"/><TableColumn fx:id="colDniRuc" text="DNI/RUC" prefWidth="110"/><TableColumn fx:id="colNombre" text="Nombre" prefWidth="220"/><TableColumn fx:id="colDireccion" text="Dirección" prefWidth="200"/><TableColumn fx:id="colTelefono" text="Teléfono" prefWidth="100"/>
-            </columns>
-          </TableView>
-        </VBox>
-      </HBox>
-    </VBox>
-  </children>
+    </children>
 </AnchorPane>

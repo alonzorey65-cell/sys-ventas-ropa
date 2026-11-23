@@ -50,6 +50,7 @@ public class MenuMenuItemDaoImp implements IMenuMenuItemDao {
         map.put("mi9", new String[]{"/view/main_usuario.fxml", "Usuarios", ""});
         map.put("mi10", new String[]{"/view/main_vendedor.fxml", "Panel Vendedor", ""});
         map.put("mi11", new String[]{"/view/main_admin.fxml", "Panel Administrador", ""});
+        map.put("mi12", new String[]{"/view/main_almacen.fxml", "Panel Almacén", ""});
 
         return map;
     }

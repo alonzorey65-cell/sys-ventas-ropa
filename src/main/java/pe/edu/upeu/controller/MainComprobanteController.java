@@ -129,56 +129,61 @@ public class MainComprobanteController {
     @FXML
     public void verComprobanteSeleccionado() {
         if (tableVentas == null) return;
-        Venta v = tableVentas.getSelectionModel().getSelectedItem();
+        Venta v = tableVentas.getSelectionModel().getSelectedItem(); // toma venta seleccionada en la tabla UI
         if (v == null) { mostrarInfo("Seleccione una venta de la tabla."); return; }
         try {
-            Comprobante comp = construirComprobanteDesdeVenta(v);
-            pasarDatos(comp);
+            Comprobante comp = construirComprobanteDesdeVenta(v); // manda Venta -> construye DTO Comprobante
+            pasarDatos(comp); // manda DTO a la vista previa (mostrarBoleta)
         } catch (Exception e) {
             mostrarError("Error", "No se pudo construir el comprobante", e.getMessage());
         }
     }
 
     private Comprobante construirComprobanteDesdeVenta(Venta v) {
-        String clienteNombre = nombreCliente(v.getIdCliente());
-        String clienteDoc = "";
-        String clienteDireccion = "";
+        // 1) Obtiene nombre de cliente: usa clienteService.buscarPorId(...) por dentro de nombreCliente()
+        String clienteNombre = nombreCliente(v.getIdCliente()); // BD/modelo Cliente -> texto para comprobante
+        String clienteDoc = "";        // aquí se guardará DNI/RUC del cliente
+        String clienteDireccion = "";  // aquí se guardará dirección del cliente
         try {
             if (v.getIdCliente() != null && clienteService != null) {
-                Cliente c = clienteService.buscarPorId(v.getIdCliente());
+                // 2) Va a la capa servicio/BD para traer el Cliente completo
+                Cliente c = clienteService.buscarPorId(v.getIdCliente()); // MainComprobanteController -> IClienteService -> ClienteRepository/BD
                 if (c != null) {
-                    clienteDoc = nvl(c.getDniRuc());
-                    clienteDireccion = nvl(c.getDireccion());
+                    clienteDoc = nvl(c.getDniRuc());         // Cliente.dniRuc -> DTO Comprobante.clienteDniRuc
+                    clienteDireccion = nvl(c.getDireccion()); // Cliente.direccion -> DTO Comprobante.clienteDireccion
                 }
             }
         } catch (Exception ignored) {}
+        // 3) Formatea fecha de Venta para mostrar en comprobante
         String fecha = v.getFecha() == null ? "" : v.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        List<Comprobante.DetalleItem> items = new ArrayList<>();
+        List<Comprobante.DetalleItem> items = new ArrayList<>(); // lista que se enviará al DTO Comprobante
         try {
             if (ventaDetalleService != null && v.getIdVenta() != null) {
-                List<VentaDetalle> dets = ventaDetalleService.listarPorVenta(v.getIdVenta());
+                // 4) Trae detalles de la venta desde servicio/repositorio BD
+                List<VentaDetalle> dets = ventaDetalleService.listarPorVenta(v.getIdVenta()); // -> IVentaDetalleService
                 for (VentaDetalle d : dets) {
                     String desc = "Producto " + (d.getIdProducto() == null ? "" : d.getIdProducto());
-                    // Resolver nombre real del producto para que el comprobante muestre descripción clara
+                    // 5) Resuelve nombre real del producto (para que el comprobante no muestre solo ID)
                     if (d.getIdProducto() != null && productoService != null) {
                         try {
-                            var p = productoService.buscarPorId(d.getIdProducto());
+                            var p = productoService.buscarPorId(d.getIdProducto()); // -> IProductoService -> ProductoRepository/BD
                             if (p != null && p.getNombre() != null && !p.getNombre().isBlank()) {
-                                desc = p.getNombre();
+                                desc = p.getNombre(); // usa nombre real del producto
                             }
                         } catch (Exception ignored) {}
                     }
-                    int cant = d.getCantidad() == null ? 0 : d.getCantidad().intValue();
-                    double pu = d.getPrecio() == null ? 0 : d.getPrecio();
-                    double sub = d.getSubtotal() == null ? 0 : d.getSubtotal();
-                    items.add(new Comprobante.DetalleItem(desc, cant, pu, sub));
+                    int cant = d.getCantidad() == null ? 0 : d.getCantidad().intValue(); // VentaDetalle -> cantidad item
+                    double pu = d.getPrecio() == null ? 0 : d.getPrecio();                // VentaDetalle -> precio unitario
+                    double sub = d.getSubtotal() == null ? 0 : d.getSubtotal();          // VentaDetalle -> subtotal
+                    items.add(new Comprobante.DetalleItem(desc, cant, pu, sub)); // arma item DTO para View/PDF
                 }
             }
         } catch (Exception ignored) {}
+        // 6) Crea el DTO Comprobante con todos los datos recolectados
         Comprobante c = new Comprobante(nvl(v.getSerie()), nvl(v.getNroComprobante()), fecha, clienteNombre, clienteDoc, clienteDireccion,
-                v.getTotal() == null ? 0 : v.getTotal(), items);
-        c.setEstado(v.getEstado());
-        return c;
+                v.getTotal() == null ? 0 : v.getTotal(), items); // DTO final que va a View/PDF
+        c.setEstado(v.getEstado()); // pasa estado ACTIVO/ANULADO al DTO
+        return c; // retorna a verComprobanteSeleccionado() -> pasarDatos() -> mostrarBoleta()
     }
 
     @FXML
@@ -235,9 +240,9 @@ public class MainComprobanteController {
     }
 
     public void pasarDatos(Comprobante boleta) {
-        this.boletaActual = boleta;
+        this.boletaActual = boleta; // recibe DTO Comprobante (desde VentaController o desde verComprobanteSeleccionado)
         if (boletaActual != null) {
-            mostrarBoleta();
+            mostrarBoleta(); // manda a renderizar la vista previa
         }
     }
 
@@ -250,7 +255,7 @@ public class MainComprobanteController {
         Task<VBox> task = new Task<>() {
             @Override
             protected VBox call() {
-                return new ComprobanteView(boletaActual).construir();
+                return new ComprobanteView(boletaActual).construir(); // manda DTO -> ComprobanteView para construir UI
             }
         };
 
@@ -290,7 +295,7 @@ public class MainComprobanteController {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                pdfService.exportar(boletaActual, archivo.toPath());
+                pdfService.exportar(boletaActual, archivo.toPath()); // manda DTO Comprobante -> ComprobantePdfService para generar PDF
                 return null;
             }
         };

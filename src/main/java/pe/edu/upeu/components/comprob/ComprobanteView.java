@@ -19,18 +19,19 @@ public class ComprobanteView {
     }
 
     public VBox construir() {
-        String serie = comprobante != null ? safe(comprobante.getSerie()) : "B001";
-        String numero = comprobante != null ? safe(comprobante.getNumero()) : "000001";
-        String fecha = comprobante != null ? safe(comprobante.getFecha()) : "";
-        String cliente = comprobante != null ? safe(comprobante.getClienteNombre()) : "Público General";
-        String dni = comprobante != null ? safe(comprobante.getClienteDniRuc()) : "";
-        String direccion = comprobante != null ? safe(comprobante.getClienteDireccion()) : "";
-        String estado = comprobante != null ? safe(comprobante.getEstado()) : "ACTIVO";
+        // Lee datos del DTO Comprobante (viene de VentaController/MainComprobanteController)
+        String serie = comprobante != null ? safe(comprobante.getSerie()) : "B001"; // -> se muestra en cabecera
+        String numero = comprobante != null ? safe(comprobante.getNumero()) : "000001"; // -> cabecera
+        String fecha = comprobante != null ? safe(comprobante.getFecha()) : ""; // -> fila Fecha
+        String cliente = comprobante != null ? safe(comprobante.getClienteNombre()) : "Público General"; // -> fila Cliente
+        String dni = comprobante != null ? safe(comprobante.getClienteDniRuc()) : ""; // -> fila DNI/RUC (etiqueta dinámica)
+        String direccion = comprobante != null ? safe(comprobante.getClienteDireccion()) : ""; // -> fila Dirección
+        String estado = comprobante != null ? safe(comprobante.getEstado()) : "ACTIVO"; // -> estado visual
         if (estado.isBlank()) estado = "ACTIVO";
-        boolean anulado = "ANULADO".equalsIgnoreCase(estado);
-        double total = comprobante != null ? comprobante.getTotal() : 0.0;
-        double base = total / 1.18;
-        double igv = total - base;
+        boolean anulado = "ANULADO".equalsIgnoreCase(estado); // determina colores/textos de anulado
+        double total = comprobante != null ? comprobante.getTotal() : 0.0; // -> totales
+        double base = total / 1.18; // cálculo visual de base imponible
+        double igv = total - base;  // cálculo visual de IGV
 
         VBox card = new VBox();
         card.setPrefWidth(460);
@@ -74,11 +75,11 @@ public class ComprobanteView {
         c2.setHgrow(Priority.ALWAYS);
         info.getColumnConstraints().addAll(c1, c2);
 
-        addInfo(info, 0, "Fecha", fecha);
-        addInfo(info, 1, "Cliente", cliente.isBlank() ? "Público General" : cliente);
-        addInfo(info, 2, etiquetaDocumento(dni), dni.isBlank() ? "-" : dni);
-        addInfo(info, 3, "Dirección", direccion.isBlank() ? "-" : direccion);
-        addInfo(info, 4, "Estado", anulado ? "ANULADO" : "PAGADO");
+        addInfo(info, 0, "Fecha", fecha); // muestra fecha del comprobante
+        addInfo(info, 1, "Cliente", cliente.isBlank() ? "Público General" : cliente); // muestra nombre cliente
+        addInfo(info, 2, etiquetaDocumento(dni), dni.isBlank() ? "-" : dni); // etiqueta dinámica DNI/RUC según documento
+        addInfo(info, 3, "Dirección", direccion.isBlank() ? "-" : direccion); // muestra dirección del cliente
+        addInfo(info, 4, "Estado", anulado ? "ANULADO" : "PAGADO"); // muestra estado del comprobante
 
         // Details
         VBox detailBox = new VBox(0);
@@ -210,11 +211,12 @@ public class ComprobanteView {
         return row;
     }
 
+    // Decide la etiqueta a mostrar según el documento seleccionado/ingresado del cliente.
     private String etiquetaDocumento(String doc) {
-        String d = safe(doc).trim();
-        if (d.matches("\\d{11}")) return "RUC";
-        if (d.matches("\\d{8}")) return "DNI";
-        return "DNI/RUC";
+        String d = safe(doc).trim();           // normaliza el documento
+        if (d.matches("\\d{11}")) return "RUC"; // 11 dígitos -> RUC
+        if (d.matches("\\d{8}")) return "DNI";  // 8 dígitos -> DNI
+        return "DNI/RUC";                       // fallback si está vacío u otro formato
     }
 
     private String money(double v) { return "S/ " + String.format(Locale.US, "%.2f", v); }

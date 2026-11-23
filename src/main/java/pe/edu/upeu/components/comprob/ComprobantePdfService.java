@@ -35,15 +35,16 @@ public class ComprobantePdfService {
         sub.setSpacingAfter(8);
         document.add(sub);
 
-        String serie = safe(comprobante != null ? comprobante.getSerie() : "B001");
-        String numero = safe(comprobante != null ? comprobante.getNumero() : "000001");
-        String fecha = safe(comprobante != null ? comprobante.getFecha() : "");
-        String cliente = safe(comprobante != null ? comprobante.getClienteNombre() : "Público General");
-        String dni = safe(comprobante != null ? comprobante.getClienteDniRuc() : "-");
-        String direccion = safe(comprobante != null ? comprobante.getClienteDireccion() : "-");
-        double total = comprobante != null ? comprobante.getTotal() : 0.0;
-        double base = total / 1.18;
-        double igv = total - base;
+        // Lee datos del DTO Comprobante (enviado por MainComprobanteController.onExportarPdf)
+        String serie = safe(comprobante != null ? comprobante.getSerie() : "B001"); // -> número de comprobante en PDF
+        String numero = safe(comprobante != null ? comprobante.getNumero() : "000001"); // -> número de comprobante en PDF
+        String fecha = safe(comprobante != null ? comprobante.getFecha() : ""); // -> fila Fecha en PDF
+        String cliente = safe(comprobante != null ? comprobante.getClienteNombre() : "Público General"); // -> fila Cliente
+        String dni = safe(comprobante != null ? comprobante.getClienteDniRuc() : "-"); // -> DNI/RUC dinámico
+        String direccion = safe(comprobante != null ? comprobante.getClienteDireccion() : "-"); // -> fila Dirección
+        double total = comprobante != null ? comprobante.getTotal() : 0.0; // -> totales en PDF
+        double base = total / 1.18; // base imponible calculada para mostrar
+        double igv = total - base;  // IGV calculado para mostrar
 
         Paragraph num = new Paragraph("N° " + serie + "-" + numero, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, Color.DARK_GRAY));
         num.setAlignment(Element.ALIGN_CENTER);
@@ -54,13 +55,13 @@ public class ComprobantePdfService {
         info.setWidthPercentage(100);
         info.setWidths(new float[]{1.2f, 3.8f});
         info.setSpacingAfter(12);
-        addInfoRow(info, "Fecha:", fecha, labelFont, valueFont);
-        addInfoRow(info, "Cliente:", cliente.isBlank() ? "Público General" : cliente, labelFont, valueFont);
-        addInfoRow(info, etiquetaDocumento(dni) + ":", dni.isBlank() ? "-" : dni, labelFont, valueFont);
-        addInfoRow(info, "Dirección:", direccion.isBlank() ? "-" : direccion, labelFont, valueFont);
-        String estado = safe(comprobante != null ? comprobante.getEstado() : "ACTIVO");
+        addInfoRow(info, "Fecha:", fecha, labelFont, valueFont); // escribe fecha en PDF
+        addInfoRow(info, "Cliente:", cliente.isBlank() ? "Público General" : cliente, labelFont, valueFont); // escribe cliente
+        addInfoRow(info, etiquetaDocumento(dni) + ":", dni.isBlank() ? "-" : dni, labelFont, valueFont); // DNI o RUC según documento
+        addInfoRow(info, "Dirección:", direccion.isBlank() ? "-" : direccion, labelFont, valueFont); // escribe dirección
+        String estado = safe(comprobante != null ? comprobante.getEstado() : "ACTIVO"); // lee estado desde DTO
         if (estado.isBlank()) estado = "ACTIVO";
-        addInfoRow(info, "Estado:", "ANULADO".equalsIgnoreCase(estado) ? "ANULADO" : "PAGADO", labelFont, valueFont);
+        addInfoRow(info, "Estado:", "ANULADO".equalsIgnoreCase(estado) ? "ANULADO" : "PAGADO", labelFont, valueFont); // escribe estado
         document.add(info);
 
         PdfPTable table = new PdfPTable(4);
@@ -159,11 +160,12 @@ public class ComprobantePdfService {
         table.addCell(v);
     }
 
+    // Decide etiqueta del documento para el PDF: 8 dígitos=DNI, 11 dígitos=RUC.
     private String etiquetaDocumento(String doc) {
-        String d = safe(doc).trim();
-        if (d.matches("\\d{11}")) return "RUC";
-        if (d.matches("\\d{8}")) return "DNI";
-        return "DNI/RUC";
+        String d = safe(doc).trim();           // normaliza documento
+        if (d.matches("\\d{11}")) return "RUC"; // va a fila del PDF como "RUC:"
+        if (d.matches("\\d{8}")) return "DNI";  // va a fila del PDF como "DNI:"
+        return "DNI/RUC";                       // fallback
     }
 
     private String money(double v) { return String.format(Locale.US, "S/ %.2f", v); }

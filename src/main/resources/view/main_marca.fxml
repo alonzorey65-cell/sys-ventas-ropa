@@ -3,23 +3,73 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.controller.MarcaController">
-  <children>
-    <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
-      <Label text="Gestión de Marcas"><font><Font name="System Bold" size="20"/></font></Label>
-      <HBox spacing="10">
-        <VBox spacing="8" prefWidth="320">
-          <Label text="Nombre"/><TextField fx:id="txtNombre" promptText="Nombre marca"/>
-          <HBox spacing="8"><Button text="Guardar" onAction="#guardar"/><Button text="Limpiar" onAction="#limpiar"/><Button text="Eliminar" onAction="#eliminar"/></HBox>
-          <Label fx:id="lblMsg" text="Listo."/>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pe.edu.upeu.controller.MarcaController">
+    <children>
+        <VBox spacing="16" AnchorPane.topAnchor="14" AnchorPane.leftAnchor="14" AnchorPane.rightAnchor="14" AnchorPane.bottomAnchor="14">
+            <children>
+                <HBox spacing="14" alignment="CENTER_LEFT" styleClass="panel-header-purple">
+                    <children>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Gestión de Marcas" style="-fx-text-fill:white; -fx-font-size:26px; -fx-font-weight:bold;"/>
+                                <Label text="Administra las marcas de tus productos con una vista clara y rápida." styleClass="muted"/>
+                            </children>
+                        </VBox>
+                        <Label text="MARCAS" style="-fx-background-color:rgba(255,255,255,0.2); -fx-text-fill:white; -fx-background-radius:20; -fx-padding:4 10; -fx-font-weight:bold;"/>
+                    </children>
+                </HBox>
+
+                <HBox spacing="16" VBox.vgrow="ALWAYS">
+                    <children>
+                        <VBox spacing="12" prefWidth="340" minWidth="300" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <Label text="Formulario de marca" styleClass="section-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Nombre" style="-fx-font-weight:bold;"/>
+                                <TextField fx:id="txtNombre" promptText="Ej. Gloria, Inca Kola"/>
+                                <HBox spacing="8">
+                                    <children>
+                                        <Button text="Guardar" onAction="#guardar" styleClass="btn-success" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                        <Button text="Limpiar" onAction="#limpiar" styleClass="btn-secondary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                        <Button text="Eliminar" onAction="#eliminar" styleClass="btn-danger" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                                    </children>
+                                </HBox>
+                                <Separator/>
+                                <Label fx:id="lblMsg" text="Listo." wrapText="true" style="-fx-text-fill:#166534; -fx-font-weight:bold;"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card" style="-fx-padding:18;">
+                            <children>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <children>
+                                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label text="Listado de marcas" styleClass="section-title">
+                                                    <font><Font name="System Bold" size="15"/></font>
+                                                </Label>
+                                                <Label text="Filtra, revisa y actualiza las marcas registradas." styleClass="muted"/>
+                                            </children>
+                                        </VBox>
+                                        <TextField fx:id="txtFiltro" promptText="Buscar marca..." prefWidth="220"/>
+                                        <Button text="Refrescar" onAction="#listar" styleClass="btn-secondary"/>
+                                    </children>
+                                </HBox>
+                                <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="90"/>
+                                        <TableColumn fx:id="colNombre" text="Nombre" prefWidth="360"/>
+                                    </columns>
+                                    <placeholder><Label text="No hay marcas registradas." styleClass="muted"/></placeholder>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
         </VBox>
-        <VBox spacing="8" HBox.hgrow="ALWAYS">
-          <HBox spacing="8"><Label text="Filtrar:"/><TextField fx:id="txtFiltro" promptText="Buscar..."/><Button text="Refrescar" onAction="#listar"/></HBox>
-          <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
-            <columns><TableColumn fx:id="colId" text="ID" prefWidth="80"/><TableColumn fx:id="colNombre" text="Nombre" prefWidth="300"/></columns>
-          </TableView>
-        </VBox>
-      </HBox>
-    </VBox>
-  </children>
+    </children>
 </AnchorPane>

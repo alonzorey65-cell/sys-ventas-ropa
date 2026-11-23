@@ -172,6 +172,7 @@ CREATE TABLE venta_detalle (
 -- Perfiles base
 INSERT INTO perfil (nombre) VALUES ('ADMINISTRADOR');
 INSERT INTO perfil (nombre) VALUES ('VENDEDOR');
+INSERT INTO perfil (nombre) VALUES ('ALMACENERO');
 
 -- Categorías base
 INSERT INTO categoria (nombre) VALUES ('General');
@@ -209,6 +210,14 @@ INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES (
 INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Ventas', 'Registrar Venta / POS', '3', '2');
 INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Reportes', 'Comprobantes', '4', '2');
 INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Sesión', 'Cerrar Sesión', '5', '2');
+
+-- Menús ALMACENERO (perfil '3')
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Inicio', 'Panel Almacén', '12', '3');
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Almacén', 'Producto', '1', '3');
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Almacén', 'Categoría', '2', '3');
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Almacén', 'Marca', '6', '3');
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Almacén', 'Unidad Medida', '7', '3');
+INSERT INTO menu (menu_nombre, menu_item_nombre, id_nombre_obj, perfil) VALUES ('Sesión', 'Cerrar Sesión', '5', '3');
 
 -- Productos de ejemplo
 INSERT INTO producto (nombre, precio, stock, id_categoria, id_marca, id_unid_medida) VALUES

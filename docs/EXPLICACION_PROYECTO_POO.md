@@ -531,6 +531,17 @@ Resultado: se crea estado de sesión en `SessionManager` y se abre `maingui.fxml
 
 Estas son funcionalidades o decisiones técnicas que agregan valor práctico al proyecto, más allá de un CRUD básico:
 
+### 9.1 Cambios recientes implementados (actualización)
+
+| Cambio | Qué se hizo | Archivos tocados | A dónde manda / cómo se conecta |
+|---|---|---|---|
+| **Etiqueta dinámica DNI/RUC en comprobante** | El comprobante ya no muestra fijo `DNI/RUC`; ahora detecta el documento: 8 dígitos = `DNI`, 11 dígitos = `RUC`. | `components/comprob/ComprobanteView.java`, `components/comprob/ComprobantePdfService.java` | `VentaController`/`MainComprobanteController` crean `Comprobante` → `ComprobanteView.construir()` lo renderiza en pantalla y `ComprobantePdfService.exportar()` lo escribe en PDF. |
+| **Dirección del cliente en comprobante** | Se agregó `clienteDireccion` al DTO y se muestra en vista previa y PDF. | `dto/comprobante/Comprobante.java`, `controller/VentaController.java`, `controller/MainComprobanteController.java`, `components/comprob/ComprobanteView.java`, `components/comprob/ComprobantePdfService.java` | `Cliente` (BD/modelo) trae `direccion` → `VentaController`/`MainComprobanteController` la copian al DTO `Comprobante` → View/PDF la muestran. |
+| **Documentación de BD comentada** | Se comentaron los esquemas SQL explicando cada tabla/campo/relación. | `resources/schema_neon.sql`, `schema.sql`, `schema_sv.sql`, `crear.sql`, `sql_merge.sql` | La app usa `application.properties` → `schema_neon.sql` (Neon/PostgreSQL) como esquema activo. |
+| **Arquitectura SQLite actualizada** | Se actualizó el equivalente SQLite y se dejó nota de que no hubo cambios estructurales por los cambios de comprobante. | `docs/sqlite_arquitectura.sql` | Sirve como arquitectura equivalente/documentación; la BD activa sigue siendo Neon/PostgreSQL. |
+| **Documentación del proyecto ampliada** | Se agregó explicación de paneles Login/Admin/Vendedor, flujos, POO y arquitectura. | `docs/EXPLICACION_PROYECTO_POO.md` | Documenta la conexión UI → Controller → Service → Repository → BD. |
+| **Comentarios de flujo en código** | Se agregaron comentarios explicando "de dónde viene y a dónde va" la data en los puntos clave del flujo de comprobante/venta. | `dto/comprobante/Comprobante.java`, `components/comprob/ComprobanteView.java`, `components/comprob/ComprobantePdfService.java`, `controller/MainComprobanteController.java`, `controller/VentaController.java` | Ejemplo: `VentaController` crea `Comprobante` → `MainComprobanteController.pasarDatos()` → `ComprobanteView.construir()` / `ComprobantePdfService.exportar()`. |
+
 | Innovación / mejora | Qué hace | Dónde se aplica | Por qué aporta valor |
 |---|---|---|---|
 | **Consulta automática DNI/RUC por API externa** | Al ingresar DNI (8) o RUC (11), el sistema puede consultar la API de apisperu y autocompletar datos del cliente. | `utils/ConsultaDNI.java`, usado en `controller/VentaController.java` (`consultaDNI`, búsqueda/autocompletado de cliente) y registrado en `AppContext.java`. | Reduce errores de digitación, acelera el registro de clientes y mejora la experiencia en el POS. |
